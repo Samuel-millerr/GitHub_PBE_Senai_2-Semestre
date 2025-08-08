@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import *
+from .views.viewAuthors import *
 
 urlpatterns = [
-    path('createAuthor/', AutorListCreate.as_view()),
-    path('viewAuthors/', AutoresListView.as_view()),
-    path('deleteAuthor/<int:pk>', AutorDeleteView.as_view()),
-    path('createBook/', BookListCreate.as_view()),
-    path('viewBooks/', BookListView.as_view()),
-    path('deleteBook/<int:pk>', BookDeleteView.as_view())
+    path('viewAllAuthors/', AuthorsList.as_view()),
+    path('viewCreateAuthor/', AuthorCreate.as_view()),
+    path('viewListAuthor/<int:pk>', AuthorList.as_view()),
+    path('viewUpdateAuthor/<int:pk>', AuthorUpdate.as_view()),
+    path('viewDeleteAuthor/<int:pk>', AuthorDelete.as_view())
 ]
