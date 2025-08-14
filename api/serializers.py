@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Autor,Livro
+from .models import Autor, Livro
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
