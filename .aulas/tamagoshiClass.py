@@ -1,26 +1,31 @@
 class Tamagoshi():
-    def __init__(self, nome, idade: float, fome: int, saude: int, tedio: int, vies_politico: str):
+    def __init__(self, nome, idade: float, fome: int, saude: int, tedio: int):
         self.nome = nome
         self.idade = 0
         self.fome = 0
         self.saude = 100
         self.tedio = 0
-        self.vies_politico = vies_politico
 
     def info_tamagoshi(self, tamagoshi):
         for key, value in tamagoshi.__dict__.items():
-            print(f"{key}: {value}")
-            
+            if type(value) == float:
+                print(f"{key}: {value:.1f}")
+            else:
+                print(f"{key}: {value}")
+
     def alimentar(self, quantidade):
         if (quantidade >= 0) and (quantidade <= 100):
-            self.fome -= self.fome * (quantidade /100)
+            self.fome = max(0, self.fome - (self.fome * (quantidade /100)))
+        else: print("O máximo de comida que pode ser dado para o tamagoshi é de 100.")
         
     def brincar(self, tempo):
         if (tempo >= 0) and (tempo <= 100):
-            self.tedio -= self.tedio * (tempo /100)
-
+            self.tedio = max(0, self.tedio - (self.tedio * (tempo /100)))
+        else:
+            print("O máximo de tempo que você pode brincar com o tamagoshi é de 100.")
+            
     def getHumor(self):
-        return 100 - ((self.nome + self.tedio)/2)
+        return 100 - ((self.saude + self.tedio)/2)
     
     def vida(self):
         if (self.fome > 50 and self.fome <= 60) or (self.tedio > 50 and self.tedio <=60):
@@ -33,10 +38,14 @@ class Tamagoshi():
             print("TO MORENDOOOOOOOOOOOOOOOOOO...... AHHHHHHH")
         elif (self.fome > 99) or (self.tedio > 99):
             self.saude = 0
-            print("Seu bichinho foi de vasco T_T")
+            print("Seu bichinho foi de vasco T_T")    
              
     def passar_tempo(self):
         self.vida()
         self.idade += 0.2
         self.tedio += 2.5
         self.fome += 5
+    
+    @classmethod
+    def criar_tamagoshi(cls, nome: str):
+        return cls(nome)
