@@ -1,3 +1,5 @@
+from random import random
+
 class Tamagoshi():
     def __init__(self, nome, idade: float, fome: int, saude: int, tedio: int):
         self.nome = nome
@@ -22,7 +24,7 @@ class Tamagoshi():
         if (tempo >= 0) and (tempo <= 100):
             self.tedio = max(0, self.tedio - (self.tedio * (tempo /100)))
         else:
-            print("O máximo de tempo que você pode brincar com o tamagoshi é de 100.")
+            print("O máximo de tempo que você pode brincar com o tamagoshi é de 0 a 100.")
             
     def getHumor(self):
         return 100 - ((self.saude + self.tedio)/2)
@@ -44,7 +46,7 @@ class Tamagoshi():
         self.vida()
         self.idade += 0.2
         self.tedio += 2.5
-        self.fome += 5
+        self.fome += 3.5
     
     @classmethod
     def criar_tamagoshi(cls, nome: str):

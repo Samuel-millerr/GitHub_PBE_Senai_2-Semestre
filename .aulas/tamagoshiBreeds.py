@@ -11,7 +11,7 @@ class TamagoshiJedi(Tamagoshi):
     def meditar(self):
         paz = randint(-5, 10)
         self.saude += 10
-        self.tedio = max(0, self.tedio - 5)
+        self.tedio -= 5
         self.paz += paz
 
         if paz >= 0: print(f"{self.nome} está meditando e recuperou energia da força!")
@@ -52,8 +52,8 @@ class TamagoshiSith(Tamagoshi):
         print(f"{self.nome} usou raiva para ganhar força!")
     
     def ritual_sombrio(self):
-        self.saude += 10
-        self.fome += 20
+        self.saude += 20
+        self.fome += 10
         print(f"{self.nome} realizou um ritual sombrio!")
 
     def mudar_lado_forca(self, nome):
