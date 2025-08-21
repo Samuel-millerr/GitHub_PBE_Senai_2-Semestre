@@ -9,31 +9,31 @@ from rest_framework.decorators import api_view
 from api.models import Autor
 from api.serializers import AuthorSerializer
 
-# Criação do CRUD com o metódo generics
-# # GET - Todos os autores
-# class AuthorsList(ListAPIView):
-#     queryset = Autor.objects.all()
-#     serializer_class = AuthorSerializer
+"""# Criação do CRUD com o metódo generics
+# GET - Todos os autores
+class AuthorsList(ListAPIView):
+    queryset = Autor.objects.all()
+    serializer_class = AuthorSerializer
 
-# # CREATE
-# class AuthorCreate(CreateAPIView):
-#     queryset = Autor.objects.all()
-#     serializer_class = AuthorSerializer
+# CREATE
+class AuthorCreate(CreateAPIView):
+    queryset = Autor.objects.all()
+    serializer_class = AuthorSerializer
 
-# # GET
-# class AuthorList(RetrieveAPIView):
-#     queryset = Autor.objects.all()
-#     serializer_class = AuthorSerializer
+# GET
+class AuthorList(RetrieveAPIView):
+    queryset = Autor.objects.all()
+    serializer_class = AuthorSerializer
 
-# # PUT
-# class AuthorUpdate(RetrieveUpdateAPIView):
-#     queryset = Autor.objects.all()
-#     serializer_class = AuthorSerializer
+# PUT
+class AuthorUpdate(RetrieveUpdateAPIView):
+    queryset = Autor.objects.all()
+    serializer_class = AuthorSerializer
 
-# DELETE
-# class AuthorDelete(RetrieveDestroyAPIView):
-#     queryset = Autor.objects.all()
-#     serializer_class = AuthorSerializer
+DELETE
+class AuthorDelete(RetrieveDestroyAPIView):
+    queryset = Autor.objects.all()
+    serializer_class = AuthorSerializer"""
 
 # Criação do CRUD com o metódo api_view() - decorator
 @api_view(['GET'])
