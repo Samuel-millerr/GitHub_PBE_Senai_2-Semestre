@@ -76,7 +76,7 @@ def author_delete(request, pk):
     try:
         autor = Author.objects.get(pk=pk)
     except:
-        return Response({"error": "author not found"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Item not found"}, status=status.HTTP_400_BAD_REQUEST)
 
     autor.delete()
     return Response(status=status.HTTP_200_OK)

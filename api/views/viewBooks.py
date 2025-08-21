@@ -1,18 +1,25 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from api.models import Book
 from api.serializers import BookSerializer
 
-# GET - Pegar todos os livros
-class BooksList(ListAPIView):
+@api_view(['GET'])
+def books_list(request):
     queryset = Book.objects.all()
-    serializer_class= BookSerializer
+    serializer = BookSerializer(queryset, many=True)
+    return Response(serializer.data)
 
-# POST - Somente um livro
-class BookCreate(CreateAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-
-# GET, PUT & DELETE - Somente um livro
-class BookUpdateDelete(RetrieveUpdateDestroyAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+@api_view(["GET", "POST"])
+def book_create(request):
+    if request.method == "GET":
+        book_model = Book.objects.model()
+        serializer = BookSerializer(book_model)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        serializer = BookSerializer(data = request.data)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else: 
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)

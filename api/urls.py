@@ -13,8 +13,10 @@ urlpatterns = [
     # URLS DAS EDITORAS
     path('viewAllPublishers/', publishers_list),
     path("viewCreatePublisher/", publisher_create),
+    path("viewListPublisher/<int:pk>", publisher_list),
+    path("viewUpdatePublisher/<int:pk>", publisher_update),
+    path("viewDeletePublisher/<int:pk>", publisher_delete),
     #URLS DOS LIVROS
-    path('viewAllBooks/', BooksList.as_view()),
-    path('viewCreateBook/', BookCreate.as_view()),
-    path('viewUpdateDeleteBook/<int:pk>', BookUpdateDelete.as_view())
+    path('viewAllBooks/', books_list),
+    path('viewCreateBook/', book_create)
 ]
