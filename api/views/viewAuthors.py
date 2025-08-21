@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import api_view
 
-from api.models import Autor
+from api.models import Author
 from api.serializers import AuthorSerializer
 
 """# Criação do CRUD com o metódo generics
@@ -38,16 +38,15 @@ class AuthorDelete(RetrieveDestroyAPIView):
 # Criação do CRUD com o metódo api_view() - decorator
 @api_view(['GET'])
 def authors_list(request):
-    queryset = Autor.objects.all()
+    queryset = Author.objects.all()
     serializer = AuthorSerializer(queryset, many=True)
     return Response(serializer.data)  
     
 @api_view(['GET'])
 def author_list(request, pk):
-    autor = Autor.objects.get(pk=pk)
+    autor = Author.objects.get(pk=pk)
     serializer = AuthorSerializer(autor)
     return Response(serializer.data)
-
 
 @api_view(['POST'])
 def author_create(request):
@@ -61,8 +60,8 @@ def author_create(request):
 @api_view(['PUT'])
 def author_update(request, pk):
     try: 
-       autor = Autor.objects.get(pk=pk)
-    except Autor.DoesNotExist:
+       autor = Author.objects.get(pk=pk)
+    except Author.DoesNotExist:
           return Response({"error": "Item not found"},status=status.HTTP_404_NOT_FOUND)
     
     serializer = AuthorSerializer(autor, data=request.data)
@@ -75,7 +74,7 @@ def author_update(request, pk):
 @api_view(['DELETE'])  
 def author_delete(request, pk):
     try:
-        autor = Autor.objects.get(pk=pk)
+        autor = Author.objects.get(pk=pk)
     except:
         return Response({"error": "author not found"}, status=status.HTTP_400_BAD_REQUEST)
 
