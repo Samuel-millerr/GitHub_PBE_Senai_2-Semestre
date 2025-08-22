@@ -15,32 +15,38 @@ class Tamagoshi():
 
     def alimentar(self, quantidade):
         if (quantidade >= 0) and (quantidade <= 100):
-            self.fome = max(0, self.fome - (self.fome * (quantidade /100)))
+            self.fome = max(0, self.fome - quantidade)
         else: print("O máximo de comida que pode ser dado para o tamagoshi é de 100.")
         
     def brincar(self, tempo):
         if (tempo >= 0) and (tempo <= 100):
-            self.tedio = max(0, self.tedio - (self.tedio * (tempo /100)))
+            self.tedio = max(0, self.tedio - tempo)
         else:
             print("O máximo de tempo que você pode brincar com o tamagoshi é de 0 a 100.")
             
     def getHumor(self):
-        return f"{100 - ((self.saude + self.tedio)/2.75):.0f}"
+        humor = max(0, 100 - ((self.saude + self.tedio)/2.75))
+        return f"{humor:.2f}"
     
     def vida(self):
         if (self.fome > 50 and self.fome <= 60) or (self.tedio > 50 and self.tedio <=60):
-            self.saude -= 10
+            self.saude = max(self.saude -self.saude, self.saude - 10)
         elif (self.fome > 60 and self.fome <= 80) or (self.tedio > 60 and self.tedio <=80):
-            self.saude -= 15
+            self.saude = max(self.saude - self.saude, self.saude - 15)
         elif (self.fome > 80 and self.fome <=90) or (self.tedio > 80 and self.tedio <=90):
-            self.saude -= 30
+            self.saude = (self.saude - self.saude, self.saude - 30)
         elif (self.fome > 90) or (self.tedio > 90):
             pass
         elif (self.fome > 99) or (self.tedio > 99):
-            self.saude = 0  
+            self.saude = 0 
+            return  0
              
     def passar_tempo(self):
         self.idade += 0.2
-        self.tedio += 2.5
-        self.fome += 3.5
+        self.tedio = min(100, self.fome + 2.5)
+        self.fome = min(100, self.fome + 3.5)
+    
+    @classmethod
+    def criar_tamagoshi(cls, nome):
+        return cls(nome)
     

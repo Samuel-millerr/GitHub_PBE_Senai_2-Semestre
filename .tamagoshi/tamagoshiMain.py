@@ -8,13 +8,13 @@ def clear():
     system('cls')
 
 def main():
-    # Declarações de variáveis utilizadas no código
-    tamagoshi_criado = False
+    tamagoshi_criado =  False # Declarações de variáveis utilizadas no código
 
     while True:
         print("=== CUIDE DE SEU TAMAGOSHI ==")
         print("Tome sua decisão de acordo com uma das opções abaixo (digite os números):")
         decisao = input("[ 1 ] Criar Tamagoshi \n[ 2 ] Cuidar de seu Tamagoshi \n[ 0 ] Sair\n > ").strip()
+
         if decisao == "0":
             break
         elif decisao == "1":
@@ -35,33 +35,36 @@ def main():
 
             clear()
             print(f"O tamagoshi foi criado seu nome é \033[3;33m{tamagoshi.nome}\33[m e ele é um {tamagoshi.__class__.__name__}")
-            tamagoshi_criado = True if tamagoshi else False
+            tamagoshi_criado = True
 
         elif decisao == "2":
             if not tamagoshi_criado: 
                 clear()
                 print("Você ainda não criou seu tamagoshi, por gentileza crie ele antes de continuar.")
             else: 
+                print("teste")
                 quadrantes = 0
                 while True:
-                    if tamagoshi.lado_forca == "Luz" or tamagoshi.lado_forca == "Sombrio":
-                        tamagoshi.vida() # Verifica as condições de vida do tamagoshi
-                        if tamagoshi.saude <= 0:
-                            clear()
-                            print("Seu bixinho morreu T_T...")
-                            input("... aperte ENTER para continuar")
-                            tamagoshi_criado = False
-                            break   
+                    tamagoshi.vida() # Verifica as condições de vida do tamagoshi
+                    
+                    if tamagoshi.saude <= 0:
+                        clear()
+
+                        print("Seu bixinho morreu T_T...")
+                        input("... aperte ENTER para continuar")
+                        
+                        tamagoshi_criado = False
+                        break   
                     else:
                         clear()         
                         quadrantes += 1 # Passagem de tempo 
-                        if quadrantes > 1:
-                            tamagoshi.passar_tempo()           
+
+                        if quadrantes > 1: # Mostra a passagem de tempo somente após o primeiro quadrante
+                            tamagoshi.passar_tempo()  
+                            if tamagoshi.lado_forca == "Luz" or tamagoshi.lado_forca == "Sombrio": print(f"\nO atual humor de {tamagoshi.nome} é {tamagoshi.getHumor()}")         
                             print(f"O tempo passou, {tamagoshi.nome} agora tem {tamagoshi.idade:.1f} anos.")
 
-                        if tamagoshi.lado_forca == "Luz" or tamagoshi.lado_forca == "Sombrio": print(f"O atual humor de {tamagoshi.nome} é {tamagoshi.getHumor()}")
-
-                        print(f"QUADRANTE {quadrantes}º")
+                        print(f"\nQUADRANTE {quadrantes}º")
                         print("Segue as informações sobre seu tamagoshi:")
                         tamagoshi.info_tamagoshi(tamagoshi)
 
@@ -77,7 +80,7 @@ def main():
                         elif tamagoshi.lado_forca == "Sombrio":
                             decisao = input("[ 1 ] Brincar \033[3;37m# Diminui o tédio de seu tamagoshi\33[m" 
                                             "\n[ 2 ] Alimentar \033[3;37m# Diminui a fome de seu tamagoshi\33[m" 
-                                            "\n[ 3 ] Canalizar raiva \033[3;37m#Aumenta a saúde e a raiva de seu tamagoshi\33[m" 
+                                            "\n[ 3 ] Canalizar raiva \033[3;37m#Diminui a saúde e aumenta a raiva de seu tamagoshi\33[m" 
                                             "\n[ 4 ] Ritual sombrio \033[3;37m# Recupera muito a vida de seu tamagoshi, porém lhe causa fome\33[m" 
                                             "\n[ 5 ] Trocar lado da força \033[3;37m#...\33[m" 
                                             "\n[ 0 ] Sair\n > ").strip()
@@ -137,11 +140,11 @@ def main():
                                 print(f"{tamagoshi.nome} está se autoconsertando...")
                                 sleep(2)
 
-                                condicao_anterior = tamagoshi.condicao
+                                saude_anterior = tamagoshi.saude
                                 tamagoshi.autoconserto()
 
                                 print("\nSTATUS ANTIGO X STATUS NOVO")
-                                print(f"Condição:   {condicao_anterior:.2f}  >     {tamagoshi.condicao:.2f}")
+                                print(f"Condição:   {saude_anterior:.2f}  >     {tamagoshi.saude:.2f}")
 
                         elif decisao == "3":
                             clear()
@@ -217,22 +220,24 @@ def main():
                                 print(f"Fome:   {fome_anterior:.2f}  >     {tamagoshi.fome:.2f}")
                                 print(f"Raiva:     {raiva_anterior:.2f}    >     {tamagoshi.raiva:.2f}")
                         
-                        elif decisao == "5" and tamagoshi.lado_forca in ("Luz","Sombrio"):
-                            print("")
+                        elif decisao == "5":
+                            clear()
                             tamagoshi.mudar_lado_forca()
-                            if tamagoshi.paz == 0:
-                                nome = tamagoshi.nome
-                                if tamagoshi.lado_forca == "Luz":    
-                                    tamagoshi = TamagoshiSith(nome)
-                                else:
-                                    tamagoshi = TamagoshiJedi(nome)
-                                quadrantes = 0
-                        
+                            if tamagoshi.lado_forca == "Luz":    
+                                if tamagoshi.paz <= 0:
+                                    nome = tamagoshi.nome
+
+                                    tamagoshi = TamagoshiSith.criar_tamagoshi(nome)
+                            else:
+                                if tamagoshi.raiva <= 0:
+                                    nome = tamagoshi.nome
+
+                                    tamagoshi = TamagoshiJedi.criar_tamagoshi(nome)                        
                         else: 
                             clear()
                             print("Você moscou hein, não selecionou nenhuma das opções! Você não interagiu com seu tamagoshi T_T.")
 
-                        passar = input("\nAperte \33[1;32mENTER\33[m para passar o tempo\n")
+                        input("\nAperte \33[1;32mENTER\33[m para passar o tempo\n")
         else:
             clear()
             print("Você não escolheu nenhuma das opções, por gentileza tente novamente.")
