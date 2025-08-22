@@ -27,7 +27,7 @@ class Tamagoshi():
             print("O máximo de tempo que você pode brincar com o tamagoshi é de 0 a 100.")
             
     def getHumor(self):
-        return 100 - ((self.saude + self.tedio)/2)
+        return f"{100 - ((self.saude + self.tedio)/2.75):.0f}"
     
     def vida(self):
         if (self.fome > 50 and self.fome <= 60) or (self.tedio > 50 and self.tedio <=60):

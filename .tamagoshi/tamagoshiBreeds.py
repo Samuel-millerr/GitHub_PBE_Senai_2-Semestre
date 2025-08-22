@@ -9,18 +9,16 @@ class TamagoshiJedi(Tamagoshi):
         self.lado_forca = lado_forca
     
     def meditar(self):
-        paz = randint(-5, 10)
+        paz = randint(-8, 12)
         self.saude += 10
-        self.tedio -= 5
+        self.tedio -= randint(5, 10)
         self.paz += paz
 
-        if paz >= 0: print(f"{self.nome} está meditando e recuperou energia da força!")
-        else: print(f"Durante a meditação {self.nome} teve pensamentos sombrios, sua paz interior foi abalada!")
+        if paz <= 0 : print(f"Durante a meditação {self.nome} teve pensamentos sombrios, sua paz interior foi abalada!")
 
     def curar_com_forca(self):
         cura = randint(0, 15)
         self.saude += cura
-        print(f"{self.nome} usou a força para se curar, o tamagoshi recuperou {cura} de vida!")
 
     def mudar_lado_forca(self, nome):
         if self.paz > 50:
@@ -38,7 +36,7 @@ class TamagoshiJedi(Tamagoshi):
         elif (self.fome > 60 and self.fome <= 80) or (self.tedio > 60 and self.tedio <=80): self.paz -= 20
         elif (self.fome > 80 and self.fome <=90) or (self.tedio > 80 and self.tedio <=90): self.paz -= 30
 
-# Declração da segunda classe de tamagoshi
+# Declaração da segunda classe de tamagoshi
 class TamagoshiSith(Tamagoshi):
     def __init__(self, nome, idade: float = 0, fome: int = 0, saude: int = 100, tedio: int = 15, raiva: int = 50, lado_forca: str = "Sombrio"):
         super().__init__(nome, idade, fome, saude, tedio)
@@ -47,14 +45,13 @@ class TamagoshiSith(Tamagoshi):
 
     def canalizar_raiva(self):
         self.saude += 5
-        self.tedio = max(0, self.tedio - 10)
-        self.raiva 
-        print(f"{self.nome} usou raiva para ganhar força!")
+        self.tedio -= randint(0, 10)
+        self.raiva += randint(0, 5)
     
     def ritual_sombrio(self):
         self.saude += 20
-        self.fome += 10
-        print(f"{self.nome} realizou um ritual sombrio!")
+        self.fome += 25
+        self.raiva += 15
 
     def mudar_lado_forca(self, nome):
         if self.raiva > 50:
@@ -83,11 +80,10 @@ class TamagoshiDroid(Tamagoshi):
     def recarregar_bateria(self):
         energia = randint(0, 15)
         self.bateria += energia
-        print(f"{self.nome} recarregou {energia}% de bateria!")
     
     def autoconserto(self):
         self.condicao += 10
         self.idade += 0.5
     
     def autodestruicao(self):
-        self.condicao -= self.condicao
+        self.condicao = 0
