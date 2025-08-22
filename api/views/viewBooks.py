@@ -11,7 +11,13 @@ def books_list(request):
     serializer = BookSerializer(queryset, many=True)
     return Response(serializer.data)
 
-@api_view(["GET", "POST"])
+@api_view(['GET'])
+def book_list(request, pk):
+    book = Book.objects.get(pk = pk)
+    serializer = BookSerializer(book)
+    return Response(serializer.data)
+
+@api_view(['GET', 'POST'])
 def book_create(request):
     if request.method == "GET":
         book_model = Book.objects.model()
@@ -23,3 +29,7 @@ def book_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else: 
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        
+@api_view(['GET', 'PUT'])
+def book_update(request):
+    pass

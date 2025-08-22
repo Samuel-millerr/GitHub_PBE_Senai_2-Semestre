@@ -13,9 +13,12 @@ def publishers_list(request):
 
 @api_view(["GET"])
 def publisher_list(request, pk):
-    publisher = Publisher.objects.get(pk=pk)
-    serializer = PublisherSerializer(publisher)
-    return Response(serializer.data)
+    try:
+        publisher = Publisher.objects.get(pk=pk)
+        serializer = PublisherSerializer(publisher)
+        return Response(serializer.data)
+    except:
+        return Response({"error": "Publisher not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET', 'POST'])
 def publisher_create(resquest):
@@ -37,14 +40,13 @@ def publisher_update(request, pk):
     try: 
        publisher = Publisher.objects.get(pk=pk)
     except Publisher.DoesNotExist:
-          return Response({"error": "Item not found"},status=status.HTTP_404_NOT_FOUND)
+          return Response({"error": "Publisher not found"},status=status.HTTP_404_NOT_FOUND)
     
     if request.method == "GET":
-        publisher = Publisher.objects.get(pk=pk)
         serializer = PublisherSerializer(publisher)
         return Response(serializer.data)
     elif request.method == "PUT":
-        serializer = PublisherSerializer(data = request.data)
+        serializer = PublisherSerializer(publisher, data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -52,11 +54,11 @@ def publisher_update(request, pk):
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def publisher_delete(pk):
+def publisher_delete(request, pk):  
     try:
         publisher = Publisher.objects.get(pk= pk)
     except:
-        return Response({"error": "Item not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Publisher not found"}, status=status.HTTP_404_NOT_FOUND)
 
     publisher.delete()
-    return Response({"message": "Editora excluida com sucesso"}, status=status.HTTP_200_OK)
+    return Response({"message": "Publisher successfully deleted"}, status=status.HTTP_200_OK)
