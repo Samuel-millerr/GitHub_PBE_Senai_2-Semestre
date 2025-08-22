@@ -44,39 +44,48 @@ def authors_list(request):
     
 @api_view(['GET'])
 def author_list(request, pk):
-    autor = Author.objects.get(pk=pk)
-    serializer = AuthorSerializer(autor)
+    author = Author.objects.get(pk=pk)
+    serializer = AuthorSerializer(author)
     return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['GET','POST'])
 def author_create(request):
-    serialiazer = AuthorSerializer(data = request.data)
-    if serialiazer.is_valid():
-        serialiazer.save()
-        return Response(serialiazer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serialiazer.data, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'GET':
+        author_model = Author.objects.model()
+        serialiazer = AuthorSerializer(author_model)
+        return Response(serialiazer.data)
+    elif request.method == 'POST':
+        serialiazer = AuthorSerializer(data = request.data)
+        if serialiazer.is_valid():
+            serialiazer.save()
+            return Response(serialiazer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serialiazer.data, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['PUT'])
+@api_view(['GET','PUT'])
 def author_update(request, pk):
     try: 
-       autor = Author.objects.get(pk=pk)
+       author = Author.objects.get(pk=pk)
     except Author.DoesNotExist:
-          return Response({"error": "Item not found"},status=status.HTTP_404_NOT_FOUND)
+          return Response({"error": "Author not found"},status=status.HTTP_404_NOT_FOUND)
     
-    serializer = AuthorSerializer(autor, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
+    if request.method == 'GET':
+        serializer = AuthorSerializer(author)
         return Response(serializer.data)
-    else: 
-        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        serializer = AuthorSerializer(author, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else: 
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])  
 def author_delete(request, pk):
     try:
-        autor = Author.objects.get(pk=pk)
+        author = Author.objects.get(pk=pk)
     except:
-        return Response({"error": "Item not found"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Author not found"}, status=status.HTTP_400_BAD_REQUEST)
 
-    autor.delete()
-    return Response(status=status.HTTP_200_OK)
+    author.delete()
+    return Response({"message": "Author successfully delete"}, status=status.HTTP_200_OK)

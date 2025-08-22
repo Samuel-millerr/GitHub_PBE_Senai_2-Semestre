@@ -26,7 +26,6 @@ def publisher_create(resquest):
         publisher_model= Publisher.objects.model()
         serializer = PublisherSerializer(publisher_model)
         return Response(serializer.data)
-    
     elif resquest.method == "POST":
         serializer = PublisherSerializer(data = resquest.data)
         if serializer.is_valid():
