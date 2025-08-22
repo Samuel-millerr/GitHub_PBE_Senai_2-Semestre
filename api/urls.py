@@ -18,5 +18,6 @@ urlpatterns = [
     path("viewDeletePublisher/<int:pk>", publisher_delete),
     #URLS DOS LIVROS
     path('viewAllBooks/', books_list),
+    path('viewListBook/', book_list),
     path('viewCreateBook/', book_create)
 ]
