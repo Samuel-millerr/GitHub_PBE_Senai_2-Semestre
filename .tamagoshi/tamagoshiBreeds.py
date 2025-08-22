@@ -11,7 +11,7 @@ class TamagoshiJedi(Tamagoshi):
     def meditar(self):
         paz = randint(-8, 12)
         self.saude += 10
-        self.tedio -= randint(5, 10)
+        self.tedio = max(self.tedio-self.tedio, self.tedio - randint(5, 10)) # Utilizado para para o tedio não ficar negativo
         self.paz += paz
 
         if paz <= 0 : print(f"Durante a meditação {self.nome} teve pensamentos sombrios, sua paz interior foi abalada!")
@@ -20,21 +20,24 @@ class TamagoshiJedi(Tamagoshi):
         cura = randint(0, 15)
         self.saude += cura
 
-    def mudar_lado_forca(self, nome):
+    def mudar_lado_forca(self):
         if self.paz > 50:
+            paz = randint(0, 10)
+            self.paz -= paz
             print(f"{self.nome} não pode mudar para o lado sombrio, sua paz interior é muito grande!")
+            print(f"Por tentar mudar de lado {self.nome} perdeu {paz} de paz!")
         elif self.paz > 10:
+            paz = randint(5, 15)
+            self.paz -= paz
             print(f"{self.nome} sente o lado sombrio o chamando mas ainda resiste sobre esses pensamentos.")
+            print(f"Por tentar mudar de lado {self.nome} perdeu {paz} de paz!")
         else:
             print(f"{self.nome} desistiu do lado da luz...")
-            tamagoshi = TamagoshiSith(nome)
-            return tamagoshi
-    
-    def vida(self):
-        super().vida
-        if (self.fome > 50 and self.fome <= 60) or (self.tedio > 50 and self.tedio <=60): self.paz -= 10
-        elif (self.fome > 60 and self.fome <= 80) or (self.tedio > 60 and self.tedio <=80): self.paz -= 20
-        elif (self.fome > 80 and self.fome <=90) or (self.tedio > 80 and self.tedio <=90): self.paz -= 30
+            self.paz = 0
+
+    def passar_tempo(self):
+        super().passar_tempo()
+        self.paz -= randint(0, 5)
 
 # Declaração da segunda classe de tamagoshi
 class TamagoshiSith(Tamagoshi):
@@ -45,7 +48,7 @@ class TamagoshiSith(Tamagoshi):
 
     def canalizar_raiva(self):
         self.saude += 5
-        self.tedio -= randint(0, 10)
+        self.tedio = max(self.tedio-self.tedio, self.tedio - randint(5, 10)) # Utilizado para para o tedio não ficar negativo
         self.raiva += randint(0, 5)
     
     def ritual_sombrio(self):
@@ -53,21 +56,24 @@ class TamagoshiSith(Tamagoshi):
         self.fome += 25
         self.raiva += 15
 
-    def mudar_lado_forca(self, nome):
+    def mudar_lado_forca(self):
         if self.raiva > 50:
+            raiva = randint(0, 5)
+            self.raiva -= raiva
             print(f"{self.nome} não pode mudar para o lado da luz, sua raiva interior é muito grande!")
+            print(f"Por tentar mudar de lado {self.nome} perdeu {raiva} de raiva!")
         elif self.raiva > 10:
+            raiva = randint(0, 10)
+            self.raiva -= raiva
             print(f"{self.nome} sente o lado da luz o chamando mas ignora sobre esses pensamentos.")
+            print(f"Por tentar mudar de lado {self.nome} perdeu {raiva} de raiva!")
         else:
             print(f"{self.nome} desistiu do lado sombrio...")
-            tamagoshi = TamagoshiJedi(nome)
-            return tamagoshi
+            self.raiva = 0
         
-    def vida(self):
-        super().vida
-        if (self.fome > 50 and self.fome <= 60) or (self.tedio > 50 and self.tedio <=60): self.raiva -= 10
-        elif (self.fome > 60 and self.fome <= 80) or (self.tedio > 60 and self.tedio <=80): self.raiva -= 20
-        elif (self.fome > 80 and self.fome <=90) or (self.tedio > 80 and self.tedio <=90): self.raiva -= 30
+    def passar_tempo(self):
+        super().passar_tempo()
+        self.raiva -= randint(0, 5)
         
 # Declaração da terceira classe de tamagoshi
 class TamagoshiDroid(Tamagoshi):
@@ -76,14 +82,21 @@ class TamagoshiDroid(Tamagoshi):
         self.idade = idade
         self.bateria = bateria
         self.condicao = condicao
+        self.lado_forca = "null"
 
     def recarregar_bateria(self):
-        energia = randint(0, 15)
-        self.bateria += energia
+        energia = randint(10, 20)
+        self.bateria = min(100, energia+self.bateria)
     
     def autoconserto(self):
-        self.condicao += 10
+        self.condicao = min(100, self.condicao + 10)
         self.idade += 0.5
     
     def autodestruicao(self):
         self.condicao = 0
+
+    def passar_tempo(self):
+        self.idade += 0.2
+        self.condicao -= randint(0, 5)
+        self.bateria -= randint(0, 5)
+

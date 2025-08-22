@@ -1,5 +1,3 @@
-from random import random
-
 class Tamagoshi():
     def __init__(self, nome, idade: float, fome: int, saude: int, tedio: int):
         self.nome = nome
@@ -37,17 +35,12 @@ class Tamagoshi():
         elif (self.fome > 80 and self.fome <=90) or (self.tedio > 80 and self.tedio <=90):
             self.saude -= 30
         elif (self.fome > 90) or (self.tedio > 90):
-            print("TO MORENDOOOOOOOOOOOOOOOOOO...... AHHHHHHH")
+            pass
         elif (self.fome > 99) or (self.tedio > 99):
-            self.saude = 0
-            print("Seu bichinho foi de vasco T_T")    
+            self.saude = 0  
              
     def passar_tempo(self):
-        self.vida()
         self.idade += 0.2
         self.tedio += 2.5
         self.fome += 3.5
     
-    @classmethod
-    def criar_tamagoshi(cls, nome: str):
-        return cls(nome)
