@@ -36,19 +36,19 @@ class AuthorDelete(RetrieveDestroyAPIView):
     serializer_class = AuthorSerializer"""
 
 # Criação do CRUD com o metódo api_view() - decorator
-@api_view(['GET'])
+@api_view(['GET']) # Metódo GET para pegar todos os autores cadastrados
 def authors_list(request):
     queryset = Author.objects.all()
     serializer = AuthorSerializer(queryset, many=True)
     return Response(serializer.data)  
-    
-@api_view(['GET'])
+
+@api_view(['GET']) # Metódo GET para pegar um autor por ID
 def author_list(request, pk):
     author = Author.objects.get(pk=pk)
     serializer = AuthorSerializer(author)
     return Response(serializer.data)
 
-@api_view(['GET','POST'])
+@api_view(['GET','POST']) # Metódo POST para criar um autor
 def author_create(request):
     if request.method == 'GET':
         author_model = Author.objects.model()
@@ -62,8 +62,8 @@ def author_create(request):
         else:
             return Response(serialiazer.data, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['GET','PUT'])
-def author_update(request, pk):
+@api_view(['GET','PUT']) # Metódo PUT para atualizar um autor
+def author_update(request, pk): 
     try: 
        author = Author.objects.get(pk=pk)
     except Author.DoesNotExist:
@@ -80,7 +80,7 @@ def author_update(request, pk):
         else: 
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['DELETE'])  
+@api_view(['DELETE']) # Metódo DELETE para deletar um autor
 def author_delete(request, pk):
     try:
         author = Author.objects.get(pk=pk)

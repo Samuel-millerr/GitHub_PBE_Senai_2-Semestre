@@ -5,13 +5,13 @@ from rest_framework.response import Response
 from api.models import Publisher
 from api.serializers import PublisherSerializer
 
-@api_view(['GET'])
+@api_view(['GET']) # Metódo GET para pegar todas as editoras
 def publishers_list(request):
     queryset = Publisher.objects.all()
     serializer = PublisherSerializer(queryset, many= True)
     return Response(serializer.data)
-
-@api_view(["GET"])
+ 
+@api_view(["GET"]) # Metódo GET para pegar uma editora por ID
 def publisher_list(request, pk):
     try:
         publisher = Publisher.objects.get(pk=pk)
@@ -20,7 +20,7 @@ def publisher_list(request, pk):
     except:
         return Response({"error": "Publisher not found"}, status=status.HTTP_404_NOT_FOUND)
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST']) # Metódo POST para criar uma editora
 def publisher_create(resquest):
     if resquest.method == "GET":
         publisher_model= Publisher.objects.model()
@@ -34,7 +34,7 @@ def publisher_create(resquest):
         else:
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PUT'])# Metódo PUT para atualizar uma editora
 def publisher_update(request, pk):
     try: 
        publisher = Publisher.objects.get(pk=pk)
@@ -52,7 +52,7 @@ def publisher_update(request, pk):
         else:
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['DELETE'])
+@api_view(['DELETE']) # Metódo DELETE para deletar uma editora
 def publisher_delete(request, pk):  
     try:
         publisher = Publisher.objects.get(pk= pk)
