@@ -80,8 +80,26 @@ def author_update(request, pk):
         else: 
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET','PATCH'])
+def author_patch(request, pk):
+    try:
+        author = Author.objects.get(pk = pk)
+    except: 
+        return Response({"error","Author not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = AuthorSerializer(author)
+        return Response(serializer.data)
+    elif request.method == 'PATCH':
+        serializer = AuthorSerializer(author, data = request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        
 @api_view(['DELETE']) # Metódo DELETE para deletar um autor
-def author_delete(request, pk):
+def author_delete(request, pk): 
     try:
         author = Author.objects.get(pk=pk)
     except:
