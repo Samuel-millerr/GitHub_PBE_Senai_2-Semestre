@@ -1,23 +1,29 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+
+#Autenticação
+from rest_framework.permissions import IsAuthenticated 
 
 from api.models import Book
 from api.serializers import BookSerializer
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def books_list(request):
     queryset = Book.objects.all()
     serializer = BookSerializer(queryset, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def book_list(request, pk):
     book = Book.objects.get(pk = pk)
     serializer = BookSerializer(book)
     return Response(serializer.data)
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def book_create(request):
     if request.method == 'GET':
         book_model = Book.objects.model()
@@ -31,6 +37,7 @@ def book_create(request):
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
 def book_update(request, pk):
     try:
         book = Book.objects.get(pk =pk)
@@ -65,6 +72,7 @@ def book_patch(request, pk):
             return Response(serializer.data)
         else: 
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        
 @api_view(['DELETE'])
 def book_delete(request, pk):
     try:

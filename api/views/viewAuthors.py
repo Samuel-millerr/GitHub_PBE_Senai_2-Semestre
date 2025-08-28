@@ -44,12 +44,14 @@ def authors_list(request):
     return Response(serializer.data)  
 
 @api_view(['GET']) # Metódo GET para pegar um autor por ID
+@permission_classes([IsAuthenticated])
 def author_list(request, pk):
     author = Author.objects.get(pk=pk)
     serializer = AuthorSerializer(author)
     return Response(serializer.data)
 
 @api_view(['GET','POST']) # Metódo POST para criar um autor
+@permission_classes([IsAuthenticated])
 def author_create(request):
     if request.method == 'GET':
         author_model = Author.objects.model()
@@ -64,6 +66,7 @@ def author_create(request):
             return Response(serialiazer.data, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET','PUT']) # Metódo PUT para atualizar um autor
+@permission_classes([IsAuthenticated])
 def author_update(request, pk): 
     try: 
        author = Author.objects.get(pk=pk)
@@ -82,6 +85,7 @@ def author_update(request, pk):
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','PATCH'])
+@permission_classes([IsAuthenticated])
 def author_patch(request, pk):
     try:
         author = Author.objects.get(pk = pk)
@@ -100,6 +104,7 @@ def author_patch(request, pk):
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['DELETE']) # Metódo DELETE para deletar um autor
+@permission_classes([IsAuthenticated])
 def author_delete(request, pk): 
     try:
         author = Author.objects.get(pk=pk)
