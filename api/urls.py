@@ -16,11 +16,8 @@ urlpatterns = [
     path('viewUpdatePartialAuthor/<int:pk>', author_patch),
     path('viewDeleteAuthor/<int:pk>', author_delete),
     # URLS DAS EDITORAS
-    path('viewAllPublishers/', publishers_list),
-    path("viewCreatePublisher/", publisher_create),
-    path("viewListPublisher/<int:pk>", publisher_list),
-    path("viewUpdatePublisher/<int:pk>", publisher_update),
-    path("viewDeletePublisher/<int:pk>", publisher_delete),
+    path('viewPublishers/', PublisherView.as_view()),
+    path('viewPublishers/<int:pk>', PublisherView.as_view()),
     #URLS DOS LIVROS
     path('viewAllBooks/', books_list),
     path('viewListBook/', book_list),
