@@ -2,6 +2,10 @@ from django.urls import path
 from .views.viewAuthors import *
 from .views.viewBooks import *
 from .views.viewPublishers import *
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     # URLS DOS AUTORES
@@ -9,6 +13,7 @@ urlpatterns = [
     path('viewCreateAuthor/', author_create),
     path('viewListAuthor/<int:pk>', author_list),
     path('viewUpdateAuthor/<int:pk>', author_update),
+    path('viewUpdatePartialAuthor/<int:pk>', author_patch),
     path('viewDeleteAuthor/<int:pk>', author_delete),
     # URLS DAS EDITORAS
     path('viewAllPublishers/', publishers_list),
@@ -19,5 +24,8 @@ urlpatterns = [
     #URLS DOS LIVROS
     path('viewAllBooks/', books_list),
     path('viewListBook/', book_list),
-    path('viewCreateBook/', book_create)
+    path('viewCreateBook/', book_create),
+    #JWT
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]
