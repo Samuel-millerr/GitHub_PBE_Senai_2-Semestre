@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.generics import  ListAPIView, CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
 
 from rest_framework.response import Response
-
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated  
 
 from api.models import Author
 from api.serializers import AuthorSerializer
@@ -37,6 +37,7 @@ class AuthorDelete(RetrieveDestroyAPIView):
 
 # Criação do CRUD com o metódo api_view() - decorator
 @api_view(['GET']) # Metódo GET para pegar todos os autores cadastrados
+@permission_classes([IsAuthenticated])
 def authors_list(request):
     queryset = Author.objects.all()
     serializer = AuthorSerializer(queryset, many=True)
