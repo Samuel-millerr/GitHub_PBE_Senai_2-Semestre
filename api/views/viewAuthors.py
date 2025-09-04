@@ -1,13 +1,16 @@
 from rest_framework import status
-
 from rest_framework.generics import  ListAPIView, CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
-
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated  
 
 from api.models import Author
 from api.serializers import AuthorSerializer
+
+import pandas as pd
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 """# Criação do CRUD com o metódo generics
 # GET - Todos os autores
@@ -113,3 +116,20 @@ def author_delete(request, pk):
 
     author.delete()
     return Response({"message": "Author successfully delete"}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def author_create_csv(request):
+    BASE_DIR = os.path.dirname(os.path.abspath(os.path.join(__file__, "../../")))
+    if request.method == 'POST':
+        documento = request.body.decode('utf-8')
+        caminho_documento = os.path.join(BASE_DIR, "population", documento)
+        if documento:
+            df = pd.read_csv(caminho_documento)
+            for index_linha in range(len(df)):
+                autor = dict(df.iloc[index_linha])
+                serializer = AuthorSerializer(data=autor)
+                if serializer.is_valid():
+                    serializer.save()
+
+        return Response(documento)
