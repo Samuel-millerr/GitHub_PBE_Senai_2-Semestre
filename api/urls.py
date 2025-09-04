@@ -11,6 +11,7 @@ urlpatterns = [
     # URLS DOS AUTORES
     path('viewAllAuthors/', authors_list),
     path('viewCreateAuthor/', author_create),
+    path('viewCreateAuthorCsv/', author_create_csv),
     path('viewListAuthor/<int:pk>', author_list),
     path('viewUpdateAuthor/<int:pk>', author_update),
     path('viewUpdatePartialAuthor/<int:pk>', author_patch),
