@@ -125,7 +125,7 @@ def author_create_csv(request):
         documento = request.body.decode('utf-8')
         caminho_documento = os.path.join(BASE_DIR, "population", documento)
         if documento:
-            df = pd.read_csv(caminho_documento)
+            df = pd.read_csv(caminho_documento, encoding="utf-8-sig")
             for index_linha in range(len(df)):
                 autor = dict(df.iloc[index_linha])
                 serializer = AuthorSerializer(data=autor)
