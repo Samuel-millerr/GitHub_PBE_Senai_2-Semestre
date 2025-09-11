@@ -12,25 +12,51 @@ class Command(BaseCommand): # Definição de um novo comando personalizado do dj
         O parâmetro `action="store_true"` garante exatamente isso, permitindo que a lógica construída no código utilize 
         esse valor para decidir qual ação executar.
         """
-        parser.add_argument("--arquivo", default="population/autores.csv") # Aqui é definido o caminho padrão lido pelo csv caso o usuário não passe nenhum caminho
-        parser.add_argument("--truncate", action="store_true") # O camando truncate significa que a tabela será totalmente apagada antes de adicionar o arquivo
+
+        # Na linha abaixo é definido o caminho padrão lido pelo csv caso o usuário não passe nenhum caminho
+        parser.add_argument("--arquivo", default="population/autores.csv") 
+        
+        # Na linha abaixo comando truncate significa que a tabela será totalmente apagada antes de adicionar o arquivo
+        parser.add_argument("--truncate", action="store_true") 
+        
+        # Na linha abaixo é desiginado o comando de atualização da tabela, sem nenhuma eliminação dos antigos dados específica
         parser.add_argument("--update", action="store_true")
+
+        # Na linha de baixo é designado o camando de eliminação dos dados do banco
         parser.add_argument("--delete", action="store_true")
 
-    @transaction.atomic
+        """ A parte de adicionar argumentos permite em suma na criação de parametros relacionados aos comandos 
+        personalizados, pode ser tanto que será utilizado dentro de seu comando ou até mesmo uma remificação do mesmo
+        """
+
+    @transaction.atomic # Aqui mantém o comando como uma forma atomica, ou seja, ou todo comando funciona, ou nada funciona
     def handle(self, *args, **o): # Adição da lógica de seu comando personalidado
-        df = pd.read_csv(o["arquivo"], encoding="utf-8-sig")
+        df = pd.read_csv(o["arquivo"], encoding="utf-8-sig") 
+        """
+        Na parte o comando acima o o["arquivo"] indica o caminho do csv caso o usuário não passe esse parametro no 
+        terminal.
+        Já o enconding garante que o csv seja lido no esquema de texto brasileiro.
+        """
         df.columns = [c.strip().lower().lstrip('\ufeff') for c in df.columns]
+        """
+        O comando acima tem como objetivo formatar todos os titulos do csv.
+        strip() - remove os espaços extra
+        strip() - deixa tudo em minusculo
+        lstrip() - remove todos os caracteres indesejados
+        """
 
-        if o['truncate']: Author.objects.all().delete()
-
+        if o["truncate"]: # Caso o comando digitado no terminal for truncate ele apagara todos os dados do
+                          # banco antes de adicionar os novos.
+            Author.objects.all().delete()
+        
+        # As seleções abaixo garantem a  formatação de todos os dados da tabela, os formatando por colunas
         df["nome"] = df["nome"].astype(str).str.strip()
         df["sobrenome"] = df["sobrenome"].astype(str).str.strip()
         df["data_nascimento"] = pd.to_datetime(df["data_nascimento"], errors="coerce", format="%Y-%m-%d").dt.date
         df["nacionalidade"] = df["nacionalidade"].astype(str).str.strip()
 
-        df = df.query("nome !='' and sobrenome !='' ")
-        df = df.dropna(subset=["data_nascimento"])
+        df = df.query("nome !='' and sobrenome !='' ") # Um filtro interno do banco que garante que nãoo sejam passados campos que estejam vazios
+        df = df.dropna(subset=["data_nascimento"]) # O comando dropna apaga as linhas que contem nulo armazenado no campo "data_nascimento"
 
         if o["update"]:
             criados = 0
@@ -47,6 +73,8 @@ class Command(BaseCommand): # Definição de um novo comando personalizado do dj
                 criados += int(created)
                 atualizados += (not created)
             self.stdout.write(self.style.SUCCESS(f"Criados: {criados} | Atualizados: {atualizados}"))
+        elif o["delete"]:
+            Author.objects.all().delete()
         else:
             objects = [Author(
                 nome = r.nome,
