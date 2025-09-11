@@ -4,9 +4,16 @@ from django.db import transaction
 from api.models import Author
 
 class Command(BaseCommand): # Definição de um novo comando personalizado do django
-    def add_arguments(self, parser): # Adiciona argumentos que podem ser utilizados em seu comando personalizadp
-        parser.add_argument("--arquivo", default="population/autores.csv")
-        parser.add_argument("--truncate", action="store_true")
+    def add_arguments(self, parser): # Adiciona argumentos que podem ser utilizados em seu comando personalizado
+        """ Aqui é onde é definido os argumentos necessários para o uso do comando, cada argumento pode conter certas propriedades
+        específicas, como `default`, que define um valor padrão ao argumento caso o usuário passe nenhum valor. 
+        No caso de argumentos com o parâmetro `action`, eles se comportam como flags booleanas: se o usuário passar a flag no terminal, 
+        o valor será True, se não passar, será False, o que indica dentro da lógica do comando qual o tipo que deve ser utilizado.
+        O parâmetro `action="store_true"` garante exatamente isso, permitindo que a lógica construída no código utilize 
+        esse valor para decidir qual ação executar.
+        """
+        parser.add_argument("--arquivo", default="population/autores.csv") # Aqui é definido o caminho padrão lido pelo csv caso o usuário não passe nenhum caminho
+        parser.add_argument("--truncate", action="store_true") # O camando truncate significa que a tabela será totalmente apagada antes de adicionar o arquivo
         parser.add_argument("--update", action="store_true")
         parser.add_argument("--delete", action="store_true")
 
