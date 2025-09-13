@@ -4,17 +4,29 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title> Cadastro </title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="./style.css"/>
 </head>
 <body>
-    <main class="singMain">
-        <form class="singForm">
-            <h1 class="singTitle">Cadastro</h1>
-            <label class="singLabel" for="user"> Usuário </label>
-            <input type="text" class="singInput" name="user"/>
-            <label class="singLabel" for="password"> Senha </label>
-            <input type="password" class="singInput" name="password"/>
-            <button class="singButton"> Fazer Login </button>
+    <main>
+        <h1 class="siteTitle">Cadastro</h1>
+        <!-- A estrutura abaixo se consiste em um forms comum, com labels e inputs representando o que o usuário deve digitar -->
+        <form class="siteForm">
+            <div class="inputGroup"> <!-- 'div' utilizada para o alinhamento dos grupos de inputs -->
+                <label class="siteLabel" for="email"> E-mail </label>
+                <input type="email" class="siteInput" name="email" placeholder="Digite seu usuário"/>
+            </div>
+            <div class="inputGroup"> <!-- 'div' utilizada para o alinhamento dos grupos de inputs -->
+                <label class="siteLabel" for="password"> Senha </label>
+                <input type="password" class="siteInput" name="password" placeholder="Digite sua senha"/>
+            </div>
+            <div class="inputGroup"> <!-- 'div' utilizada para o alinhamento dos grupos de inputs -->
+                <label class="siteLabel" for="confirmPassword"> Confirme a Senha </label>
+                <input type="password" class="siteInput" name="confirmPassword" placeholder="Digite sua senha novamente"/>
+            </div>
+            <button class="siteButton" type="submit"> Entrar </button>
+            <div class="links"> <!-- 'div' utilizada para o alinhamento dos grupos dos 'links' -->
+                <a href="./login"> Fazer Login </a>
+            </div>
         </form>
     </main>
 </body>
