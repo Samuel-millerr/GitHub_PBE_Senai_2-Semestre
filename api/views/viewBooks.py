@@ -56,6 +56,7 @@ def book_update(request, pk):
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','PATCH'])
+@permission_classes([IsAuthenticated])
 def book_patch(request, pk):
     try:
         book = Book.objects.get(pk = pk)

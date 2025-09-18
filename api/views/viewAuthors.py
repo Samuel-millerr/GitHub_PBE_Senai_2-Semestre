@@ -3,6 +3,9 @@ from rest_framework.generics import  ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated  
+from rest_framework.filters import SearchFilter
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from api.models import Author
 from api.serializers import AuthorSerializer
@@ -42,9 +45,16 @@ class AuthorDelete(RetrieveDestroyAPIView):
 @api_view(['GET']) # Metódo GET para pegar todos os autores cadastrados
 @permission_classes([IsAuthenticated])
 def authors_list(request):
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     queryset = Author.objects.all()
+    for filter in list(filter_backends):
+        queryset = filter().filter_queryset(request, queryset, view=authors_list)
     serializer = AuthorSerializer(queryset, many=True)
     return Response(serializer.data)  
+
+authors_list.filter_backends = [DjangoFilterBackend, SearchFilter]
+authors_list.filterset_fields = ["nacionalidade", "data_nascimento"]
+authors_list.search_fields = ["nome", "sobrenome"]
 
 @api_view(['GET']) # Metódo GET para pegar um autor por ID
 @permission_classes([IsAuthenticated])
