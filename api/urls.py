@@ -17,12 +17,15 @@ urlpatterns = [
     path('viewUpdatePartialAuthor/<int:pk>', author_patch),
     path('viewDeleteAuthor/<int:pk>', author_delete),
     # URLS DAS EDITORAS
-    path('viewPublishers/', PublisherView.as_view()),
+    path('viewAllPublishers/', PublisherView.as_view()),
     path('viewPublishers/<int:pk>', PublisherView.as_view()),
     #URLS DOS LIVROS
     path('viewAllBooks/', books_list),
     path('viewListBook/', book_list),
     path('viewCreateBook/', book_create),
+    path('viewUpdateBook/', book_update),
+    path('viewUpdatePartialBook/', book_patch),
+    path('viewDeleteBook/', book_delete),   
     #JWT
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
