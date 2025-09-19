@@ -10,20 +10,20 @@
     <main>
         <h1 class="siteTitle">Cadastro</h1>
         <!-- A estrutura abaixo se consiste em um forms comum, com labels e inputs representando o que o usuário deve digitar -->
-        <form class="siteForm">
+        <form class="siteForm" action="/send_cadastro" method="post">
             <div class="inputGroup"> <!-- 'div' utilizada para o alinhamento dos grupos de inputs -->
-                <label class="siteLabel" for="email"> E-mail </label>
-                <input type="email" class="siteInput" name="email" placeholder="Digite seu usuário"/>
+                <label class="siteLabel" for="user"> Usuário </label>
+                <input type="text" class="siteInput" id="user" name="user" placeholder="Digite seu usuário"/>
             </div>
             <div class="inputGroup"> <!-- 'div' utilizada para o alinhamento dos grupos de inputs -->
                 <label class="siteLabel" for="password"> Senha </label>
-                <input type="password" class="siteInput" name="password" placeholder="Digite sua senha"/>
+                <input type="password" class="siteInput"  id="password" name="password" placeholder="Digite sua senha"/>
             </div>
             <div class="inputGroup"> <!-- 'div' utilizada para o alinhamento dos grupos de inputs -->
                 <label class="siteLabel" for="confirmPassword"> Confirme a Senha </label>
-                <input type="password" class="siteInput" name="confirmPassword" placeholder="Digite sua senha novamente"/>
+                <input type="password" class="siteInput" id="confirmPassword" name="confirmPassword" placeholder="Digite sua senha novamente"/>
             </div>
-            <button class="siteButton" type="submit"> Entrar </button>
+            <button class="siteButton" type="submit"> Cadastrar </button>
             <div class="links"> <!-- 'div' utilizada para o alinhamento dos grupos dos 'links' -->
                 <a href="./login"> Fazer Login </a>
             </div>
