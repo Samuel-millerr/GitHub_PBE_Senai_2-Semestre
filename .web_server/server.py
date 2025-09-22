@@ -1,12 +1,16 @@
 import os
+import sys
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs
 
 """A definição do handler personalizado é criado através de uma classe que herda o 'SimpleHTTPRequestHandler' e tem como objetivo final 
 receber e processar as respostas de um evento específico que ocorre dentro do servidor.
 """
+
 global usuarios_cadastrados
-usuarios_cadastrados = {}
+global filmes_cadastrados
+usuarios_cadastrados = {1: {'user': 'Samuel', 'password': '1234'}}
+filmes_cadastrados = {}
 
 class MyHandle(SimpleHTTPRequestHandler):
     def list_directory(self, path):
@@ -72,6 +76,7 @@ class MyHandle(SimpleHTTPRequestHandler):
                         self.carregar_pagina("./login.html")
                         message = "<script>alert('Acesso negado!! Usuário ou senha incorretos.')</script>" # Gera uma mensagem de 'error' caso as credencias estejam erradas
                         self.wfile.write(message.encode("utf-8"))
+            print(usuarios_cadastrados)
 
         elif self.path == '/send_cadastro':
             content_length = int(self.headers['Content-length'])
@@ -91,14 +96,46 @@ class MyHandle(SimpleHTTPRequestHandler):
                 message = "<script>alert('Usuário cadastrado com sucesso!')</script>"
                 self.wfile.write(message.encode("utf-8"))
 
+        elif self.path == "/send_cadastro_filmes":
+            print("teste")
+            content_length = int(self.headers['Content-length'])
+            body = self.rfile.read(content_length).decode('utf-8')
+            form_data = parse_qs(body)
+
+            title = form_data.get('title')
+            actors = form_data.get('actor')
+            director = form_data.get('director')
+            year = form_data.get('year')
+            genre = form_data.get('genre')
+            producer = form_data.get('producer')
+            summary = form_data.get('summary')
+
+            film = {
+                "title": title[0],
+                "actors": actors,
+                "director": director[0],
+                "year": year[0],
+                "genre": genre[0],
+                "producer": producer[0],
+                "summary": summary[0]
+            }
+            
+            i = len(filmes_cadastrados)
+            filmes_cadastrados[i+1] = film
+            
+            self.carregar_pagina('./filmes_listagem.html')
+            message = "<script>alert('Filme cadastrado com sucesso!')</script>"
+            self.wfile.write(message.encode("utf-8"))
+        
         else:
             super(MyHandle, self).do_POST()
+            
  
 def main():
     """Função para iniciar o servidor, recebe a porta que deve ser utilizada, ou seja , o endereço do servidor, e o handle personalidado criado na classe
     acima.
     """
-    server_address = ('',8000)
+    server_address = ('',8001)
     httpd = HTTPServer(server_address, MyHandle)
     print(f"Servidor rodando na porta http://localhost:{server_address[1]}") # Os colchetes no server_address é utilizado para pegar a porta indicada no código
     httpd.serve_forever()
