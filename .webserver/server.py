@@ -3,14 +3,15 @@ import json
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs
 
-"""A definição do handler personalizado é criado através de uma classe que herda o 'SimpleHTTPRequestHandler' e tem como objetivo final 
-receber e processar as respostas de um evento específico que ocorre dentro do servidor.
-"""
+""" Aqui são definidas as variáveis globais, que servem como um 'banco de dados' simples. """
 
 global usuarios_cadastrados
 global filmes_cadastrados
 usuarios_cadastrados = {1: {'user': 'Samuel', 'password': '1234'}}
 filmes_cadastrados = {1 :{"title": "O Poderoso Chefão", "actors": "Marlon Brando, Al Pacino", "director": "Francis Coppola", "year": "1972", "genre": "Crime, Drama", "producer": "Albert S. Ruddy", "summary": "A saga da família mafiosa Corleone e seu patriarca, Vito Corleone."}}
+
+"""A definição do handler personalizado é criado através de uma classe que herda o 'SimpleHTTPRequestHandler'.
+O objetivo receber e processar as respostas de um evento específico que ocorre dentro do servidor."""
 
 class MyHandle(SimpleHTTPRequestHandler):
     def list_directory(self, path):
@@ -27,9 +28,8 @@ class MyHandle(SimpleHTTPRequestHandler):
         return super().list_directory(path)
 
     def carregar_pagina(self, caminho):
-        """ Aqui é utilizada uma das formas possívels para abrir uma página dentro de um servidor, o que muda aqui é somente o caminho inserido como 
-        parâmetro na função.
-        """
+        """ Aqui é utilizada uma das formas possívels para abrir uma página dentro de um servidor, 
+        o que muda aqui é somente o caminho inserido como parâmetro na função. """
         f = open(os.path.join(caminho), encoding='utf-8')
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -44,33 +44,32 @@ class MyHandle(SimpleHTTPRequestHandler):
         return form_data
     
     def gerar_arquivo_js(self, filmes_data, caminho_js="filmes.js"):
-        """ COMENTAR """
+        """ Gera um arquivo JavaScript com base nos filmes cadastrados.
+        Os dados são convertidos para JSON (mesma estrutura) 
+        e utilizados no HTML através do script criado. """
+        
         films_json = json.dumps(filmes_data, ensure_ascii=False)
-        conteudo_js = f"""const films_data = {films_json};
-            const length_films_data = Object.keys(films_data).length - 1;
-            const cardFilm = document.getElementsByClassName("siteCardFilm");
-
-            for(let i = 0; i <= length_films_data; i++) {{
-                let info_film = cardFilm[i].children;
-                info_film[0].innerHTML = "Título: " + films_data[i+1]["title"];
-                info_film[1].innerHTML = "Atores: " + films_data[i+1]["actors"];
-                info_film[2].innerHTML = "Diretor: " + films_data[i+1]["director"];
-                info_film[3].innerHTML = "Ano: " + films_data[i+1]["year"];
-                info_film[4].innerHTML = "Gênero: " + films_data[i+1]["genre"];
-                info_film[5].innerHTML = "Produtor: " + films_data[i+1]["producer"];
-            }}
-
-            console.log(films_data);"""
+        conteudo_js = f"const films_data = {films_json}; \n" \
+                    "const length_films_data = Object.keys(films_data).length - 1; \n" \
+                    "const cardFilm = document.getElementsByClassName('siteCardFilm'); \n" \
+                    "for(let i = 0; i <= length_films_data; i++){ \n" \
+                    "   let info_film = cardFilm[i].children; \n" \
+                    "   info_film[0].innerHTML = 'Título: ' + films_data[i+1]['title'];\n" \
+                    "   info_film[1].innerHTML = 'Atores: ' + films_data[i+1]['actors']; \n" \
+                    "   info_film[2].innerHTML = 'Diretor: ' + films_data[i+1]['director'];  \n" \
+                    "   info_film[3].innerHTML = 'Ano: ' + films_data[i+1]['year']; \n" \
+                    "   info_film[4].innerHTML = 'Gênero: ' + films_data[i+1]['genre']; \n" \
+                    "   info_film[5].innerHTML = 'Produtor: ' + films_data[i+1]['producer']; \n" \
+                    "}"
         
         with open(caminho_js, "w", encoding="utf-8") as f:
             f.write(conteudo_js)
 
-
     def do_GET(self):
         try:    
             """ Esse bloco de código tem como objetivo 'renderizar' todas as páginas dentro do servidor, cada caminho indicado dentro das condições 
-            é um caminho possível de ser feito dentro do site. Todas as páginas estão utilizando de uma função em comum para abrir as páginas.
-            """
+            é um caminho possível de ser feito dentro do site. Todas as páginas estão utilizando de uma função em comum para abrir as páginas. """
+
             if self.path == "/login":
                 self.carregar_pagina('./login.html')   
             elif self.path == "/cadastro":
@@ -86,6 +85,8 @@ class MyHandle(SimpleHTTPRequestHandler):
             self.send_error(404, "File Not Found")
     
     def do_POST(self):
+        """ Os dois metódos POST abaixo funcionam da mesma forma, recebendo informações dos formulário
+        e realizando questões como autenticação e liberação. """
         if self.path == '/send_login':
             form_data = self.retornar_post_formulario()
 
@@ -95,7 +96,9 @@ class MyHandle(SimpleHTTPRequestHandler):
             for user in usuarios_cadastrados.values():
                 if user['user'] == user_type and user['password'] == password_type:
                     self.carregar_pagina("./filmes_listagem.html") # Carrega a página caso o usuário e senhas estiverem corretos
-                    self.gerar_arquivo_js(filmes_cadastrados)
+                    message = "<script>alert('Seja bem vindo!! Acesso permitido.')</script>" # Gera uma mensagem de 'error' caso as credencias estejam erradas
+                    self.wfile.write(message.encode("utf-8"))
+                    self.gerar_arquivo_js(filmes_cadastrados) # Ativa a função de criação do arquivo js, caso tenha filmes cadastrados, eles apareceram na tela
                 else:
                     self.carregar_pagina("./login.html")
                     message = "<script>alert('Acesso negado!! Usuário ou senha incorretos.')</script>" # Gera uma mensagem de 'error' caso as credencias estejam erradas
@@ -118,6 +121,8 @@ class MyHandle(SimpleHTTPRequestHandler):
                 self.wfile.write(message.encode("utf-8"))
 
         elif self.path == "/send_cadastro_filmes":
+            """ O cadastro de filmes se consiste em uma lógica bem simples, os dados
+            são recolhidos do formulário e depois passados para um dinionário em python """
             form_data = self.retornar_post_formulario()
 
             title = form_data.get('title', [""])[0]
@@ -142,7 +147,7 @@ class MyHandle(SimpleHTTPRequestHandler):
             filmes_cadastrados[i+1] = film
 
             self.carregar_pagina('./filmes_listagem.html')
-            self.gerar_arquivo_js(filmes_cadastrados)
+            self.gerar_arquivo_js(filmes_cadastrados)  # Ativa a função de criação do arquivo js, caso tenha filmes cadastrados, eles apareceram na tela
             message = "<script>alert('Filme cadastrado com sucesso!')</script>"
             self.wfile.write(message.encode("utf-8"))
         
@@ -154,23 +159,9 @@ def main():
     """Função para iniciar o servidor, recebe a porta que deve ser utilizada, ou seja , o endereço do servidor, e o handle personalidado criado na classe
     acima.
     """
-    server_address = ('',8001)
+    server_address = ('',8000)
     httpd = HTTPServer(server_address, MyHandle)
     print(f"Servidor rodando na porta http://localhost:{server_address[1]}") # Os colchetes no server_address é utilizado para pegar a porta indicada no código
     httpd.serve_forever()
 
 main()
-
-# Primeiro exemplo de criação de servidor
-# Definido a porta 
-# port = 8000
-
-# Definindo o gerenciador/manipular de requisições
-# handler = SimpleHTTPRequestHandler
-
-# Criando a instancia do servidor
-# server = HTTPServer(('localhost', port), MyHandle.list_directory)
-
-# print(f"Server Runing in http://localhost:{port}")
-
-# server.serve_forever()
