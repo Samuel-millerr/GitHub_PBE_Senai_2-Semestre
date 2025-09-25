@@ -32,10 +32,10 @@ class Command(BaseCommand):
 
             for r in df.itertuples(index=False):
                 _, created = Publisher.objects.update_or_create(
-                    nome = r.nome
-                    cnpj = r.cnpj
-                    telefone = r.telefone
-                    email = r.email
+                    nome = r.nome,
+                    cnpj = r.cnpj,
+                    telefone = r.telefone,
+                    email = r.email,
                     site = r.site
                 )
 
