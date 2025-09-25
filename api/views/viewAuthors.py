@@ -1,11 +1,7 @@
 from rest_framework import status
-from rest_framework.generics import  ListAPIView, CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated  
-from rest_framework.filters import SearchFilter
-
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import api_view
 
 from api.models import Author
 from api.serializers import AuthorSerializer
@@ -13,122 +9,62 @@ from api.serializers import AuthorSerializer
 import pandas as pd
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-"""# Criação do CRUD com o metódo generics
-# GET - Todos os autores
-class AuthorsList(ListAPIView):
-    queryset = Autor.objects.all()
-    serializer_class = AuthorSerializer
-
-# CREATE
-class AuthorCreate(CreateAPIView):
-    queryset = Autor.objects.all()
-    serializer_class = AuthorSerializer
-
-# GET
-class AuthorList(RetrieveAPIView):
-    queryset = Autor.objects.all()
-    serializer_class = AuthorSerializer
-
-# PUT
-class AuthorUpdate(RetrieveUpdateAPIView):
-    queryset = Autor.objects.all()
-    serializer_class = AuthorSerializer
-
-DELETE
-class AuthorDelete(RetrieveDestroyAPIView):
-    queryset = Autor.objects.all()
-    serializer_class = AuthorSerializer"""
-
-# Criação do CRUD com o metódo api_view() - decorator
-@api_view(['GET']) # Metódo GET para pegar todos os autores cadastrados
-@permission_classes([IsAuthenticated])
-def authors_list(request):
-    filter_backends = [DjangoFilterBackend, SearchFilter]
-    queryset = Author.objects.all()
-    for filter in list(filter_backends):
-        queryset = filter().filter_queryset(request, queryset, view=authors_list)
-    serializer = AuthorSerializer(queryset, many=True)
-    return Response(serializer.data)  
-
-authors_list.filter_backends = [DjangoFilterBackend, SearchFilter]
-authors_list.filterset_fields = ["nacionalidade", "data_nascimento"]
-authors_list.search_fields = ["nome", "sobrenome"]
-
-@api_view(['GET']) # Metódo GET para pegar um autor por ID
-@permission_classes([IsAuthenticated])
-def author_list(request, pk):
-    author = Author.objects.get(pk=pk)
-    serializer = AuthorSerializer(author)
-    return Response(serializer.data)
-
-@api_view(['GET','POST']) # Metódo POST para criar um autor
-@permission_classes([IsAuthenticated])
-def author_create(request):
-    if request.method == 'GET':
-        author_model = Author.objects.model()
-        serialiazer = AuthorSerializer(author_model)
-        return Response(serialiazer.data)
-    elif request.method == 'POST':
-        serialiazer = AuthorSerializer(data = request.data)
-        if serialiazer.is_valid():
-            serialiazer.save()
-            return Response(serialiazer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serialiazer.data, status=status.HTTP_400_BAD_REQUEST)
-    
-@api_view(['GET','PUT']) # Metódo PUT para atualizar um autor
-@permission_classes([IsAuthenticated])
-def author_update(request, pk): 
-    try: 
-       author = Author.objects.get(pk=pk)
-    except Author.DoesNotExist:
-          return Response({"error": "Author not found"},status=status.HTTP_404_NOT_FOUND)
-    
-    if request.method == 'GET':
-        serializer = AuthorSerializer(author)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        serializer = AuthorSerializer(author, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else: 
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET','PATCH'])
-@permission_classes([IsAuthenticated])
-def author_patch(request, pk):
-    try:
+class AuthorView(APIView):
+    def get_author(self, pk):
         author = Author.objects.get(pk = pk)
-    except: 
-        return Response({"error","Author not found"}, status=status.HTTP_404_NOT_FOUND)
-    
-    if request.method == 'GET':
-        serializer = AuthorSerializer(author)
-        return Response(serializer.data)
-    elif request.method == 'PATCH':
-        serializer = AuthorSerializer(author, data = request.data, partial = True)
+        return author
+
+    """ METÓDO POST """
+    def post(self, request):
+        serializer = AuthorSerializer(data = request.data)
+        if serializer.is_valid():   
+            for author in Author.objects.all():
+                if str(author.nome) == serializer.data["nome"] and str(author.sobrenome) == serializer.data["sobrenome"]:
+                    return Response({"error": f"o autor {serializer.data["nome"]} já está cadastrado no banco de dados!"} , status=status.HTTP_409_CONFLICT)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error": "wrong parameters"}, status=status.HTTP_400_BAD_REQUEST)
+
+    """ METÓDO GET"""
+    def get(self, request, pk=None):
+        if pk:
+            try:
+                author = Author.objects.get(pk = pk)
+                serializer = AuthorSerializer(author)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except:
+                return Response({"error": "author not found"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            queryset = Author.objects.all()
+            serializer = AuthorSerializer(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    """ METÓDO PATCH """
+    def patch(self, request, pk=True):
+        try:
+            author = self.get_author(pk)
+        except:
+            return Response({"error": "author not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AuthorSerializer(author, data=request.data, partial = True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
-        
-@api_view(['DELETE']) # Metódo DELETE para deletar um autor
-@permission_classes([IsAuthenticated])
-def author_delete(request, pk): 
-    try:
-        author = Author.objects.get(pk=pk)
-    except:
-        return Response({"error": "Author not found"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"message": "wrong parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
-    author.delete()
-    return Response({"message": "Author successfully delete"}, status=status.HTTP_200_OK)
+    """ METÓDO DELETE"""
+    def delete(self, request, pk=True):
+        try:
+            author = self.get_author(pk)
+        except:
+            return Response({"error": "Author not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        author.delete()
+        return Response({"message": "author successfully delete"}, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def author_create_csv(request):
     BASE_DIR = os.path.dirname(os.path.abspath(os.path.join(__file__, "../../")))
     if request.method == 'POST':
