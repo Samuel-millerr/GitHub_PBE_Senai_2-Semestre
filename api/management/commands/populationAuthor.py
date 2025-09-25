@@ -67,7 +67,7 @@ class Command(BaseCommand): # Definição de um novo comando personalizado do dj
                     nome = r.nome,
                     sobrenome = r.sobrenome,
                     data_nascimento = r.data_nascimento,
-                    defaults={"nacionalidade": r.nacionalidade}
+                    defaults={"nacionalidade": r.nacionalidade},
                 )
 
                 criados += int(created)

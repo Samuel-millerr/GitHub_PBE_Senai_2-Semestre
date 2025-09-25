@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **o):
-        df = pd.read_csv(o["--arquivo"], encoding="utf-8-sig")
+        df = pd.read_csv(o["arquivo"], encoding="utf-8-sig")
         df.columns = [c.strip().lower().lstrip('\ufeff') for c in df.columns]
 
         if o["truncate"]:
@@ -53,7 +53,7 @@ class Command(BaseCommand):
                 cnpj = r.cnpj,
                 telefone = r.telefone,
                 email = r.email,
-                site = r.site,
+                site = r.site
             ) for r in df.itertuples(index=False)]
 
             Publisher.objects.bulk_create(objects, ignore_conflicts=True)
