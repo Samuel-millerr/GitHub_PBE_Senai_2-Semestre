@@ -49,11 +49,11 @@ class Command(BaseCommand):
 
         else:
             objects = [Publisher(
-                nome = r.nome
-                cnpj = r.cnpj
-                telefone = r.telefone
-                email = r.email
-                site = r.site
+                nome = r.nome,
+                cnpj = r.cnpj,
+                telefone = r.telefone,
+                email = r.email,
+                site = r.site,
             ) for r in df.itertuples(index=False)]
 
             Publisher.objects.bulk_create(objects, ignore_conflicts=True)
