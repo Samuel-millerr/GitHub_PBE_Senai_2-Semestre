@@ -26,7 +26,9 @@ class BookView(APIView):
     def post(self, request):
         serializer = BookSerializer(data = request.data)
         if serializer.is_valid():
-            return "teste"
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
