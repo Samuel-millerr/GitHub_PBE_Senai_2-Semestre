@@ -14,7 +14,7 @@ class Author(models.Model):
 # Tabela de Editora
 class Publisher(models.Model):
     nome = models.CharField(max_length=100)
-    cpnj = models.CharField(max_length=18, unique=True, null=True, blank=True)
+    cnpj = models.CharField(max_length=18, unique=True, null=True, blank=True)
     endereco = models.CharField(max_length=200, null= True, blank=True)
     telefone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
