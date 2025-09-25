@@ -73,8 +73,10 @@ class Command(BaseCommand): # Definição de um novo comando personalizado do dj
                 criados += int(created)
                 atualizados += (not created)
             self.stdout.write(self.style.SUCCESS(f"Criados: {criados} | Atualizados: {atualizados}"))
+
         elif o["delete"]:
             Author.objects.all().delete()
+
         else:
             objects = [Author(
                 nome = r.nome,

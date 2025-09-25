@@ -24,4 +24,38 @@ class Command(BaseCommand):
         df["email"] = df["email"].astype(str).str.strip()
         df["site"] = df["site"].astype(str).str.strip()
 
+        df.query("nome != ''")
         
+        if o["update"]:
+            criados = 0
+            atualizados = 0
+
+            for r in df.itertuples(index=False):
+                _, created = Publisher.objects.update_or_create(
+                    nome = r.nome
+                    cnpj = r.cnpj
+                    telefone = r.telefone
+                    email = r.email
+                    site = r.site
+                )
+
+            criados += int(created)
+            atualizados += (not created)
+
+            self.stdout.write(self.style(f"CRIADOS: {criados} | Atualizados: {atualizados}"))
+
+        elif o["delete"]:
+            Publisher.objects.all().delete()
+
+        else:
+            objects = [Publisher(
+                nome = r.nome
+                cnpj = r.cnpj
+                telefone = r.telefone
+                email = r.email
+                site = r.site
+            ) for r in df.itertuples(index=False)]
+
+            Publisher.objects.bulk_create(objects, ignore_conflicts=True)
+
+            self.stdout.write(self.style.SUCCESS(f"Criados: {len(objects)}"))
