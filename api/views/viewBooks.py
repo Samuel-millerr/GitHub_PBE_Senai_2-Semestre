@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 #Autenticação
@@ -7,6 +8,25 @@ from rest_framework.permissions import IsAuthenticated
 
 from api.models import Book
 from api.serializers import BookSerializer
+
+class BookView(APIView):
+    def get(self, request, pk=None):
+        if pk:
+            try:
+                book = Book.objects.get(pk = pk)
+                serializer = BookSerializer(book)
+                return Response(serializer.data)
+            except:
+                return Response({"error": "Publisher not found"})
+        else:
+            queryset = Book.objects.all()
+            serializer = BookSerializer(queryset, many=True)
+            return Response(serializer.data)
+        
+    def post(self, request):
+        serializer = BookSerializer(data = request.data)
+        if serializer.is_valid():
+            return "teste"
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

@@ -13,7 +13,7 @@ from api.models import Publisher
 from api.serializers import PublisherSerializer
 
 class PublisherView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request, pk=None):
         if pk:
