@@ -1,3 +1,11 @@
+"""Views em Django são funções ou classes responsáveis por receber as requisições do usuário 
+(como acessar uma página), processar a lógica necessária (como consultar o banco de dados) e 
+retornar uma resposta, possívelmente em JSON.
+
+Existem diversas formas de desenvolver esses metódos em Django, abaixo estão listadas
+algumas formas de realizar esse processo.
+"""
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
@@ -11,7 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 from models import Author
 from serializers import AuthorSerializer
 
-# Criação do CRUD com o metódo generics
+""" GENERICS """
 # GET - Todos os autores
 class AuthorsList(ListAPIView):
     queryset = Author.objects.all()
@@ -38,6 +46,7 @@ class AuthorDelete(RetrieveDestroyAPIView):
     serializer_class = AuthorSerializer
 
 
+""" DECORATOR @api_view() """
 # Criação do CRUD com o metódo api_view() - decorator
 @api_view(['GET']) # Metódo GET para pegar todos os autores cadastrados
 @permission_classes([IsAuthenticated])

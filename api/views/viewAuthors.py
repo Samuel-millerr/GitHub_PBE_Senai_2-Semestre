@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 
 from api.models import Author
 from api.serializers import AuthorSerializer
@@ -11,16 +12,19 @@ import os
 
 class AuthorView(APIView):
     def get_author(self, pk):
+        """ Função utilizada para pegar um author somente, utilizada em metódos onde é necessário uma primary key """
         author = Author.objects.get(pk = pk)
         return author
+
+    # permission_classes = [IsAuthenticated]
 
     """ METÓDO POST """
     def post(self, request):
         serializer = AuthorSerializer(data = request.data)
-        if serializer.is_valid():   
+        if serializer.is_valid(): 
             for author in Author.objects.all():
-                if str(author.nome) == serializer.data["nome"] and str(author.sobrenome) == serializer.data["sobrenome"]:
-                    return Response({"error": f"o autor {serializer.data["nome"]} já está cadastrado no banco de dados!"} , status=status.HTTP_409_CONFLICT)
+                if str(author.nome) == request.data["nome"] and str(author.sobrenome) == request.data["sobrenome"]:
+                    return Response({"error": f"o autor {request.data["nome"]} já está cadastrado no banco de dados!"} , status=status.HTTP_409_CONFLICT)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
