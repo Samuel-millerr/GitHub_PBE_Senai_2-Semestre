@@ -28,13 +28,15 @@ class MyHandle(SimpleHTTPRequestHandler):
         return super().list_directory(path)
 
     def carregar_pagina(self, caminho):
-        """ Aqui é utilizada uma das formas possívels para abrir uma página dentro de um servidor, 
-        o que muda aqui é somente o caminho inserido como parâmetro na função. """
-        f = open(os.path.join(caminho), encoding='utf-8')
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        self.wfile.write(f.read().encode('utf-8'))
+        try:
+            with open(os.path.join(os.getcwd(), caminho), 'r', encoding='utf-8') as arquivo:
+                content = arquivo.read()
+                self.send_response(200)
+                self.send_header("content-type", "text/html; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(content.encode("utf-8"))
+        except FileNotFoundError:
+            self.send_error(404, "Arquivo não encontrado")
 
     def retornar_post_formulario(self):
         """ Função usada para ler e retornar o corpo do POST já decodificado."""
@@ -95,14 +97,13 @@ class MyHandle(SimpleHTTPRequestHandler):
 
             for user in usuarios_cadastrados.values():
                 if user['user'] == user_type and user['password'] == password_type:
-                    self.carregar_pagina("./filmes_listagem.html") # Carrega a página caso o usuário e senhas estiverem corretos
-                    message = "<script>alert('Seja bem vindo!! Acesso permitido.')</script>" # Gera uma mensagem de 'error' caso as credencias estejam erradas
-                    self.wfile.write(message.encode("utf-8"))
-                    self.gerar_arquivo_js(filmes_cadastrados) # Ativa a função de criação do arquivo js, caso tenha filmes cadastrados, eles apareceram na tela
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
                 else:
-                    self.carregar_pagina("./login.html")
-                    message = "<script>alert('Acesso negado!! Usuário ou senha incorretos.')</script>" # Gera uma mensagem de 'error' caso as credencias estejam erradas
-                    self.wfile.write(message.encode("utf-8"))
+                    self.send_response(403)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
 
         elif self.path == '/send_cadastro':
             form_data = self.retornar_post_formulario()
