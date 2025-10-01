@@ -32,7 +32,7 @@ class Book(models.Model):
     isbn = models.CharField(max_length=255)
     descricao = models.TextField()
     idioma = models.CharField(max_length=255, default="Português")
-    ano_publicacao = models.DateField(null=True, blank=True)
+    ano_publicacao = models.IntegerField(null=True, blank=True)
     paginas = models.IntegerField()
     preco = models.DecimalField(
                                 max_digits=10, # Define a quantidade de digitos máximos possíveis dentro do campo, incluindo as casas antes e depois da virgula
