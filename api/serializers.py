@@ -12,12 +12,12 @@ class PublisherSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(source='autor', read_only=True)
-    publisher = PublisherSerializer(source='editora', read_only=True)
+    autor = AuthorSerializer(read_only=True)
+    editora = PublisherSerializer(read_only=True)
     class Meta:
         model = Book
         fields = ['titulo', 'subtitulo', 
-                  'author', 'publisher', 
+                  'autor', 'editora', 
                   'isbn', 'descricao', 
                   'idioma', 'ano_publicacao', 
                   'paginas', 'preco', 
