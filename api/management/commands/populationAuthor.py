@@ -4,6 +4,8 @@ from django.db import transaction
 from api.models import Author
 
 class Command(BaseCommand): # Definição de um novo comando personalizado do django
+    help = 'Popula o banco de dados com dados de um arquivo CSV usando Pandas.'
+    
     def add_arguments(self, parser): # Adiciona argumentos que podem ser utilizados em seu comando personalizado
         """ Aqui é onde é definido os argumentos necessários para o uso do comando, cada argumento pode conter certas propriedades
         específicas, como `default`, que define um valor padrão ao argumento caso o usuário passe nenhum valor. 

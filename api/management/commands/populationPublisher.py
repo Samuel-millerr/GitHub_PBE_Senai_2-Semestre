@@ -4,6 +4,8 @@ from django.db import transaction
 from api.models import Publisher
 
 class Command(BaseCommand):
+    help = 'Popula o banco de dados com dados de um arquivo CSV usando Pandas.'
+    
     def add_arguments(self, parser):
         parser.add_argument("--arquivo", default="population/editoras.csv")
         parser.add_argument("--truncate", action="store_true")
