@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <h1>Lista de Livros</h1>
+  <article>
+    <h1>Lista de Editoras</h1>
     <ul>
       <li v-for="publisher in publishers" :key="publishers.id">
         {{publisher.nome }} - {{publisher.cnpj}}
       </li>
     </ul>
-  </div>
+  </article>
 </template>
 
 <script setup>

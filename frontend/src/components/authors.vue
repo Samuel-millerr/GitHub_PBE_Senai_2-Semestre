@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <h1>Lista de Livros</h1>
+  <article>
+    <h1>Lista de Autores</h1>
     <ul>
       <li v-for="author in authors" :key="authors.id">
         {{author.nome }} - {{author.sobrenome}} - {{author.nacionalidade}}
       </li>
     </ul>
-  </div>
+  </article>
 </template>
 
 <script setup>
