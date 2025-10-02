@@ -1,29 +1,29 @@
 <template>
   <main id="mainLibrary">
-    <h1> Biblioteca </h1>
+      <header>
+      <h1 @click="activeData = ''"> Biblioteca </h1>
 
-    <div>
-      <button @click="activeData = 'authors'">Autores</button>
-      <button @click="activeData = 'publishers'">Editoras</button>
-      <button @click="activeData = 'books'">Livros</button>
-    </div>
-
-    <section>
+      
+      <div>
+        <button @click="activeData = 'authors'">Autores</button>
+        <button @click="activeData = 'publishers'">Editoras</button>
+        <button @click="activeData = 'books'">Livros</button>    
+      </div>
+    </header> 
       <Authors v-if="activeData === 'authors'" :data="authors" title="Lista de Autores" />
       <Publishers v-if="activeData === 'publishers'" :publishers="posts" title="Lista de Editoras" />
       <Books v-if="activeData === 'books'" :data="books" title="Lista de Editoras" />
-    </section>
   </main>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onDeactivated } from 'vue'
 
 import Authors from './components/authors.vue'
 import Publishers from './components/publishers.vue'
 import Books from './components/books.vue'
 
-const activeData = ref('users')
+const activeData = ref('')
 
 const books = ref([])
 const authors = ref([])
@@ -50,43 +50,53 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  height: 100vh;
+  gap: 0.25rem;
   width: 100%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-section {
-  margin-top: 1rem;
-  background-color: skyblue;
+header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #2c3e50;
   color: white;
-  padding: 1rem 1.5rem 1rem 1.5rem;
-  border-radius: 0.25rem;
+  padding: 2rem 3rem 2rem 3rem;
 }
 
 div {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  width: 25%;
+  gap: 1rem;
 }
 
 button {
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 18px;
+  max-height: 2.5rem;
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  font-size: 24px;
   font-weight: 500;
   border: none;
-  background-color: white;
-  color: black;
-  box-shadow: 0 0 5px 1px black;
+  background-color: transparent;
+  color: white;
   transition: 1s;
+  cursor: pointer;
 }
 
 button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
-article {
-  font-size: 22px;
+h1 {
+  font-size: 38px;
+  cursor: pointer;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
