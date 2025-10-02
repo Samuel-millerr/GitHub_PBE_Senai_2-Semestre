@@ -13,7 +13,8 @@ class BookView(APIView):
         return book
     
     # permission_classes = [IsAuthenticated]
-    
+
+    """ METÓDO GET"""
     def get(self, request, pk=None):
         if pk:
             try:
@@ -27,6 +28,7 @@ class BookView(APIView):
             serializer = BookSerializer(queryset, many=True)
             return Response(serializer.data)
         
+    """ METÓDO POST """
     def post(self, request):
         serializer = BookSerializer(data = request.data)
         if serializer.is_valid():
@@ -40,6 +42,7 @@ class BookView(APIView):
         else:
             return Response({"error": "wrong parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
+    """ METÓDO GET """
     def get(self, request, pk=None):
         if pk:
             try:
@@ -53,6 +56,7 @@ class BookView(APIView):
             serializer = BookSerializer(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
     
+    """ METÓDO PATCH """
     def patch(self, request, pk=True):
         try: 
             author = self.get_book(pk)
@@ -65,6 +69,7 @@ class BookView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "wrong parameters"}, status=status.HTTP_400_BAD_REQUEST)
     
+    """ METÓDO DELETE """
     def delete(self, request, pk=True):
         try:
             author = self.get_book(pk)
