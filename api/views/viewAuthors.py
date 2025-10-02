@@ -24,7 +24,8 @@ class AuthorView(APIView):
         if serializer.is_valid(): 
             for author in Author.objects.all():
                 if str(author.nome) == request.data["nome"] and str(author.sobrenome) == request.data["sobrenome"]:
-                    return Response({"error": f"o autor {request.data["nome"]} já está cadastrado no banco de dados!"} , status=status.HTTP_409_CONFLICT)
+                    nome = request.data["nome"]
+                    return Response({"error": f"o autor {nome} já está cadastrado no banco de dados!"} , status=status.HTTP_409_CONFLICT)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

@@ -27,9 +27,11 @@ class PublisherView(APIView):
         if serializer.is_valid():
             for publisher in Publisher.objects.all():
                 if str(publisher.nome) == request.data["nome"]:
-                    return Response({"error": f"a editora com o nome {request.data["nome"]} já está cadastrado no banco"}, status=status.HTTP_409_CONFLICT)
+                    nome = request.data["nome"]
+                    return Response({"error": f"a editora com o nome {nome} já está cadastrado no banco"}, status=status.HTTP_409_CONFLICT)
                 if str(publisher.cnpj) == request.data["cnpj"]:
-                    return Response({"error": f"o cnpj {request.data["cnpj"]} já está cadastrado no banco de dados"})  
+                    cnpj = request.data["cnpj"]
+                    return Response({"error": f"o cnpj {cnpj} já está cadastrado no banco de dados"})  
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

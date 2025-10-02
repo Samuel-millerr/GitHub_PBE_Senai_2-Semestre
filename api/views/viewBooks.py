@@ -34,9 +34,12 @@ class BookView(APIView):
         if serializer.is_valid():
             for book in Book.objects.all():
                 if book.titulo == request.data["titulo"]:
-                    return Response({"error": f"o livro {request.data["titulo"]} já está cadastrado no sistema"})
+                    titulo = request.data["titulo"]
+                    return Response({"error": f"o livro {titulo} já está cadastrado no sistema"})
                 if book.isbn == request.data["isbn"]:
-                    return Response({"error": f"o livro com o isbn {request.data["isbn"]} já está cadastrado"})
+                    isbn = request.data["isbn"]
+                    print(isbn)
+                    return Response({"error": f"o livro com o isbn {isbn} já está cadastrado"})
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

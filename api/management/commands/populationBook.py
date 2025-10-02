@@ -15,7 +15,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **o):
         df = pd.read_csv(o["arquivo"], encoding="utf-8-sig")
-        df.columns = [c.strip().lower().lstrip("|ufeff") for c in df.columns]
+        df.columns = [c.strip().lower().lstrip("\ufeff") for c in df.columns]
 
         self.stdout.write(f"Colunas encontradas no CSV: {list(df.columns)}")
         
@@ -25,13 +25,13 @@ class Command(BaseCommand):
         df["titulo"] = df["titulo"].astype(str).str.strip()
         df["subtitulo"] = df["subtitulo"].astype(str).str.strip()
         df["autor"] = df["autor"].astype(int)
-        df["editora"] = df["ditora"].astype(int)
+        df["editora"] = df["editora"].astype(int)
         df["descricao"] = df["descricao"].astype(str).str.strip()
         df["idioma"] = df["idioma"].astype(str).str.strip()
         df["ano_publicacao"] = df["ano_publicacao"].astype(int)
         df["paginas"] = df["paginas"].astype(int)
         df["preco"] = df["preco"].astype(float)
-        df["estoque"] = df["stoque"].astype(int)
+        df["estoque"] = df["estoque"].astype(int)
         df["desconto"] = df["desconto"].astype(float)
         df["disponivel"] = df["disponivel"].astype(bool)
         df["dimensoes"] = df["dimensoes"].astype(str).str.strip()
