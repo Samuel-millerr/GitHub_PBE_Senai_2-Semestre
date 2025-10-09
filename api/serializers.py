@@ -16,7 +16,7 @@ class BookSerializer(serializers.ModelSerializer):
     editora = PublisherSerializer(read_only=True)
     class Meta:
         model = Book
-        fields = ['titulo', 'subtitulo', 
+        fields = ['id', 'titulo', 'subtitulo', 
                   'autor', 'editora', 
                   'isbn', 'descricao', 
                   'idioma', 'ano_publicacao', 
