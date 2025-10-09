@@ -1,3 +1,30 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const books = ref([]);
+const router = useRouter();
+
+async function getBooks() {
+  const response = await fetch('http://127.0.0.1:8000/api/viewBook/');
+  const data = await response.json();
+  books.value = data;
+  console.log(books)
+}
+
+onMounted(() => {
+  getBooks();
+})
+
+defineExpose({
+  books
+})
+
+function goToBookDetails(bookId) {
+  router.push({name: "BookDetails", params: {id: bookId}})
+}
+</script>
+
 <template>
   <article>
     <h1>Lista de Livros</h1>
@@ -17,7 +44,7 @@
           <th> Dimensões </th>
         </tr>
       </thead>
-      <tr v-for="book in books" :key="book.id">
+      <tr v-for="book in books" :key="book.id" @click="goToBookDetails(book.id)">
         <td> {{ book.titulo }} </td> 
         <td> {{ book.isbn }}</td>
         <td> {{book.ano_publicacao}} </td> 
@@ -34,28 +61,7 @@
   </article>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-
-const books = ref([])
-
-async function getBooks() {
-  const response = await fetch('http://127.0.0.1:8000/api/viewBook/')
-  const data = await response.json()
-  books.value = data
-  console.log(data)
-}
-
-onMounted(() => {
-  getBooks()
-})
-
-defineExpose({
-  books
-})
-</script>
-
-<style>
+<style scoped>
 table {
   width: 100%;
   border-collapse: collapse;

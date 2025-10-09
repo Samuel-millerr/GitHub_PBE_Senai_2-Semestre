@@ -19,18 +19,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
-const authors = ref([])
+const authors = ref([]);
 
 async function getAuthors() {
-  const response = await fetch('http://127.0.0.1:8000/api/viewAuthor/')
-  const data = await response.json()
-  authors.value = data
+  const response = await fetch('http://127.0.0.1:8000/api/viewAuthor/');
+  const data = await response.json();
+  authors.value = data;
 }
 
 onMounted(() => {
-  getAuthors()
+  getAuthors();
 })
 
 defineExpose({
@@ -38,7 +38,7 @@ defineExpose({
 })
 </script>
 
-<style>
+<style scoped>
 table {
   width: 100%;
   border-collapse: collapse;

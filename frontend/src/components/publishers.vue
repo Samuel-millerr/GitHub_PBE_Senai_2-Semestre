@@ -21,18 +21,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
 const publishers = ref([])
 
 async function getPublishers() {
-  const response = await fetch('http://127.0.0.1:8000/api/viewPublisher/')
-  const data = await response.json()
-  publishers.value = data
+  const response = await fetch('http://127.0.0.1:8000/api/viewPublisher/');
+  const data = await response.json();
+  publishers.value = data;
 }
 
 onMounted(() => {
-  getPublishers()
+  getPublishers();
 })
 
 defineExpose({
@@ -40,7 +40,7 @@ defineExpose({
 })
 </script>
 
-<style>
+<style scoped>
 article {
   width: 100%;
   padding: 1rem;
