@@ -22,4 +22,4 @@ class BookSerializer(serializers.ModelSerializer):
                   'idioma', 'ano_publicacao', 
                   'paginas', 'preco', 
                   'estoque', 'desconto', 
-                  'disponivel', 'dimensoes', 'peso']
+                  'disponivel', 'dimensoes', 'peso', 'capa']

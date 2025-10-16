@@ -16,8 +16,6 @@ class Command(BaseCommand):
     def handle(self, *args, **o):
         df = pd.read_csv(o["arquivo"], encoding="utf-8-sig")
         df.columns = [c.strip().lower().lstrip("\ufeff") for c in df.columns]
-
-        self.stdout.write(f"Colunas encontradas no CSV: {list(df.columns)}")
         
         if o["truncate"]:
             Book.objects.all().delete()
@@ -36,6 +34,7 @@ class Command(BaseCommand):
         df["disponivel"] = df["disponivel"].astype(bool)
         df["dimensoes"] = df["dimensoes"].astype(str).str.strip()
         df["peso"] = df["peso"].astype(float)
+        df["capa"] = df["capa"].astype(str).str.strip()
 
         df = df.query("titulo != '' ")
 
@@ -63,7 +62,8 @@ class Command(BaseCommand):
                     desconto = r.desconto,
                     disponivel = r.disponivel,
                     dimensoes = r.dimensoes,
-                    peso = r.peso
+                    peso = r.peso,
+                    capa = r.capa
                 )
 
                 criados += int(created)
@@ -95,7 +95,8 @@ class Command(BaseCommand):
                     desconto=r.desconto,
                     disponivel=r.disponivel,
                     dimensoes=r.dimensoes,
-                    peso=r.peso
+                    peso=r.peso,
+                    capa=r.capa
                 ))
 
             Book.objects.bulk_create(objects, ignore_conflicts=True)

@@ -25,7 +25,7 @@ class Publisher(models.Model):
 
 # Tabela de livros 
 class Book(models.Model):
-    titulo = models.CharField(max_length=50)  
+    titulo = models.CharField(max_length=50)
     subtitulo = models.CharField(max_length=255)
     autor = models.ForeignKey(Author, on_delete=models.CASCADE)
     editora = models.ForeignKey(Publisher, on_delete=models.CASCADE)
@@ -43,6 +43,7 @@ class Book(models.Model):
     disponivel = models.BooleanField(default=True)
     dimensoes = models.CharField(max_length=255)
     peso = models.DecimalField(max_digits=10, decimal_places=2)
+    capa = models.CharField(max_length=510)
     
     def __str__(self):
         return f"{self.titulo}"
