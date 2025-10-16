@@ -1,8 +1,8 @@
 import { createMemoryHistory, createRouter } from "vue-router";
 
-import Authors from "./components/authors.vue";
-import Books from "./components/books.vue";
-import Publishers from "./components/publishers.vue";
+import Authors from "./components/Authors.vue";
+import Books from "./components/Books.vue";
+import Publishers from "./components/Publishers.vue";
 import BookDetail from "./components/BookDetail.vue"
 
 const routes = [

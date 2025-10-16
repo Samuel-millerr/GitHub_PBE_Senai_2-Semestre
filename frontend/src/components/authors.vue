@@ -33,9 +33,6 @@ onMounted(() => {
   getAuthors();
 })
 
-defineExpose({
-  authors
-})
 </script>
 
 <style scoped>

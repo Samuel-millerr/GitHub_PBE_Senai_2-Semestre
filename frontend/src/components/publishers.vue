@@ -35,9 +35,6 @@ onMounted(() => {
   getPublishers();
 })
 
-defineExpose({
-  publishers
-})
 </script>
 
 <style scoped>

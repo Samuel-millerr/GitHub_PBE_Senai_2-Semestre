@@ -16,14 +16,13 @@ onMounted(() => {
   getBook(route.params.id)
 })
 
-defineExpose({
-    book
-})
 </script>
 
 <template>
     <main>
-        <button> Voltar </button>
+        <div id="conteiner-buttons">
+            <router-link to="/books" id="back-button"> Voltar </router-link>
+        </div>
         <article id="info">
             <aside id="cover"></aside>
             <section id="main-info">
@@ -31,7 +30,7 @@ defineExpose({
                     <h2> {{ book.titulo }} </h2>
                     <h3> {{ book.subtitulo }}</h3>
                     <div id="book-chips">
-                        <p> {{ book.idioma }}</p>
+                        <p> {{ book.idioma }} </p>
                         <p> {{ book.ano_publicacao }} </p>
                     </div>
                 </header>
@@ -43,7 +42,7 @@ defineExpose({
                     <div>
                         <p> Dimensões: {{ book.dimensoes }}</p>
                         <p> Peso: {{ book.peso  }}</p>
-                        <p> Disponível: {{ book.disponivels }}</p>
+                        <p> Disponível: {{ book.disponivel ? 'Sim': 'Não' }} </p>
                     </div>
                     <div>
                         <p id="price-info"> Preço: {{ book.preco }}</p>
@@ -62,19 +61,39 @@ main {
     background-color: #f9f7f4
 }
 
+#conteiner-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 50%;
+    padding: 1rem 0 1rem 0;
+}
+
+#back-button {
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    color: white;
+    background-color: #2c3e50;
+    font-size: 18px;
+    border: none;
+    box-shadow: 0 0 2px 1px #333;
+    text-decoration: none;
+}
+
 #info {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-evenly;
+    width: 50%;
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 0.5rem;
-    gap: 2rem;
+    gap: 0.5rem;
 }
 
 #cover {
-    width: 12rem;
-    height: 100%;
+    width: 16rem;
+    height: 95%;
     background-color: #f9f7f4;
     border-radius: 0.75rem;
 }
@@ -83,6 +102,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    width: 50%;
 }
 
 #header-info {
@@ -121,6 +141,7 @@ main {
 
 #details-info {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     font-size: 17px;
     font-weight: 600;
@@ -131,12 +152,13 @@ main {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%;
-    font-weight: 700;
+    height: 85%;
+    font-weight: 600;
     color: white;
-    font-size: 20px;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    background-color: #a37446;
+    font-size: 18px;
+    padding: 0.75rem 1rem 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #2c3e50;
+    cursor: default;
 }
 </style>

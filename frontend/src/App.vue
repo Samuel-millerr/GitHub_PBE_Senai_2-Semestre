@@ -1,14 +1,14 @@
+<script setup>
+import { RouterView } from 'vue-router';
+import Head from './components/Head.vue';
+</script>
+
 <template>
   <main id="mainLibrary">
     <Head/>
     <RouterView/>
   </main>
 </template>
-
-<script setup>
-import { RouterView } from 'vue-router';
-import Head from './components/head.vue';
-</script>
 
 <style scoped>
 main {

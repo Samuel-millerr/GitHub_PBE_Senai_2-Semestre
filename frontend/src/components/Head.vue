@@ -38,10 +38,10 @@
   border: none;
   background-color: transparent;
   color: white;
-  transition: 1s;
+  transition: 0.5s;
   cursor: pointer;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .header-link-active {

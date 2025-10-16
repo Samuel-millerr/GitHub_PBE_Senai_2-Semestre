@@ -16,10 +16,6 @@ onMounted(() => {
   getBooks();
 })
 
-defineExpose({
-  books
-})
-
 function goToBookDetails(bookId) {
   router.push({name: "BookDetails", params: {id: bookId}})
 }
