@@ -1,13 +1,12 @@
 <template>
-    <header id="site-header">
-        <router-link to="/" id="header-logo"> Biblioteca </router-link>
+  <header id="site-header">
+      <router-link to="/" id="header-logo"> Biblioteca </router-link>
 
-        <div id="links-conteiner">
-          <router-link to="/authors" class="header-link" active-class="header-link-active"> Autores </router-link>
-          <router-link to="/publishers" class="header-link" active-class="header-link-active"> Editoras </router-link>
-          <router-link to="/books" class="header-link" active-class="header-link-active"> Livros </router-link>
-        </div>
-    </header> 
+      <div id="links-conteiner">
+        <router-link to="/authors" class="header-link" active-class="header-link-active"> Autores </router-link>
+        <router-link to="/publishers" class="header-link" active-class="header-link-active"> Editoras </router-link>
+      </div>
+  </header> 
 </template>
 
 <style scoped>
@@ -18,6 +17,7 @@
   background-color: #2c3e50;
   color: white;
   padding: 2rem 2rem 2rem 3rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #links-conteiner {
@@ -38,10 +38,10 @@
   border: none;
   background-color: transparent;
   color: white;
-  transition: 0.5s;
+  transition: all ease 1s;
   cursor: pointer;
   text-decoration: none;
-  border-radius: 2px;
+  border-radius: px;
 }
 
 .header-link-active {

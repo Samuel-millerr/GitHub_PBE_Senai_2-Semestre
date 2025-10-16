@@ -15,16 +15,17 @@ async function getBook(id) {
 onMounted(() => {
   getBook(route.params.id)
 })
-
 </script>
 
 <template>
-    <main>
-        <div id="conteiner-buttons">
-            <router-link to="/books" id="back-button"> Voltar </router-link>
+    <section id="book-detail-container">
+        <div id="buttons-conteiner">
+            <router-link to="/" id="button-back"> Voltar </router-link>
         </div>
         <article id="info">
-            <aside id="cover"></aside>
+            <aside id="cover">
+                <img :src="book.capa" class="book-cover" alt="Capa do livro"></img>
+            </aside>
             <section id="main-info">
                 <header id="header-info">
                     <h2> {{ book.titulo }} </h2>
@@ -45,23 +46,27 @@ onMounted(() => {
                         <p> Disponível: {{ book.disponivel ? 'Sim': 'Não' }} </p>
                     </div>
                     <div>
-                        <p id="price-info"> Preço: {{ book.preco }}</p>
+                        <p id="price-info"> Preço: R$ {{ book.preco }}</p>
                     </div>
                 </div>
             </section>
         </article>
-    </main>
+    </section>
 </template>
 
 <style scoped>
-main {
+#book-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 87vh;
     padding: 5rem;
     background-color: #f9f7f4
 }
 
-#conteiner-buttons {
+#buttons-conteiner {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -69,7 +74,7 @@ main {
     padding: 1rem 0 1rem 0;
 }
 
-#back-button {
+#button-back {
     padding: 0.5rem 1rem 0.5rem 1rem;
     color: white;
     background-color: #2c3e50;
@@ -77,6 +82,11 @@ main {
     border: none;
     box-shadow: 0 0 2px 1px #333;
     text-decoration: none;
+    transition: all ease 2s;
+}
+
+#button-back:hover {
+    background-color: #436e99;
 }
 
 #info {
@@ -87,15 +97,27 @@ main {
     width: 50%;
     background-color: #ffffff;
     padding: 2rem;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     gap: 0.5rem;
+    box-shadow: 0 0 2px 1px #33333393;
 }
 
 #cover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 16rem;
     height: 95%;
-    background-color: #f9f7f4;
-    border-radius: 0.75rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 3px 1px #333;
+}
+
+.book-cover {
+    border-radius: 0.25rem;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 #main-info {
@@ -110,6 +132,7 @@ main {
     flex-direction: column;
     padding: 0.75rem;
     gap: 0.35rem;
+    color: #333;
 }
     
 #book-chips {
@@ -144,7 +167,8 @@ main {
     align-items: center;
     justify-content: space-between;
     font-size: 17px;
-    font-weight: 600;
+    font-weight: 700;
+    color: #333;
 }
 
 #price-info {

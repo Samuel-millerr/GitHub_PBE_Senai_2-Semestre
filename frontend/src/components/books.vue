@@ -22,74 +22,94 @@ function goToBookDetails(bookId) {
 </script>
 
 <template>
-  <article>
-    <h1>Lista de Livros</h1>
-    <table>
-      <thead>
-        <tr>
-          <th> Titulo </th>
-          <th> ISBN </th>
-          <th> Ano de Publicação </th>
-          <th> Autor </th>
-          <th> Editora </th>
-          <th> Páginas </th>
-          <th> Preço </th>
-          <th> Estoque </th>
-          <th> Disponível </th>
-          <th> Peso </th>
-          <th> Dimensões </th>
-        </tr>
-      </thead>
-      <tr v-for="book in books" :key="book.id" @click="goToBookDetails(book.id)">
-        <td> {{ book.titulo }} </td> 
-        <td> {{ book.isbn }}</td>
-        <td> {{book.ano_publicacao}} </td> 
-        <td> {{book.autor.nome }}  </td> 
-        <td> {{ book.editora.nome }} </td> 
-        <td> {{ book.paginas}} </td>
-        <td> R$ {{ book.preco }}</td>
-        <td> {{ book.estoque }}</td>
-        <td> {{ book.disponivel ? 'Sim' : 'Não' }} </td>
-        <td> {{ book.peso }}</td>
-        <td> {{ book.dimensoes }}</td>
-      </tr>
-    </table>
-  </article>
+  <section>
+    <h1 id="title">Livros</h1>
+    <div class="livros-container">
+      <div v-for="book in books" :key="books.id" class="livro-card" @click="goToBookDetails(book.id)">
+        <img :src="book.capa" alt="Capa do livro">
+        <div class="livro-info">
+            <h3>{{ book.titulo }}</h3>
+            <p class="autor">{{ book.autor.nome }} {{ book.autor.sobrenome }}</p>
+            <p class="editora">{{ book.editora.nome }}</p>
+            <p class="preco"> R$ {{ book.preco }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem;
-  font-family: Arial, sans-serif;
-  font-size: 0.85rem; 
-  cursor: pointer;
+section{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4vh;
+    margin-bottom: 10rem;
 }
-
-table th,
-table td {
-  border: 1px solid #ccc;
-  padding: 6px 8px;
-  font-size: 20px;
-  text-align: left;
-  vertical-align: top;
+ 
+#title{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 32px;
 }
-
-table th {
-  background-color: #2c3e50;
-  color: white;
-  font-weight: 600;
-  font-size: 18px;
-  padding: 0.5rem;
+ 
+.livros-container{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 5vh;
+    padding: 3vh;
+    gap: 23px;
 }
-
-table tr:hover {
-  background-color: #f1f1f1;
+  .livro-card {
+    width: 300px;
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-align: center;
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+ 
+ 
+.livro-card img {
+    width: 230px;
+    height: 330px;
+    object-fit: fill;
+    display: block;
+    border-radius: 0.25rem;
 }
-
-table td {
-  color: #333;
-  line-height: 1.3;
+ 
+.livro-card .livro-info {
+    padding: 12px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+}
+ 
+.livro-card h3 {
+   
+    margin: 8px 0 4px 0;
+}
+ 
+.livro-card .autor,
+.livro-card .editora,
+.livro-card .preco {
+    font-size: 14px;
+    margin: 2px 0;
+    color: #555;
+}
+ 
+.livro-card:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transform: translateY(-4px);
 }
 </style>

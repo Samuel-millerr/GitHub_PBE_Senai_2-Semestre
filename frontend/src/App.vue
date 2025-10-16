@@ -4,8 +4,8 @@ import Head from './components/Head.vue';
 </script>
 
 <template>
+  <Head/>
   <main id="mainLibrary">
-    <Head/>
     <RouterView/>
   </main>
 </template>

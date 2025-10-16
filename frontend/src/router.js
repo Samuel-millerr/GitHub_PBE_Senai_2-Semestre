@@ -6,10 +6,9 @@ import Publishers from "./components/Publishers.vue";
 import BookDetail from "./components/BookDetail.vue"
 
 const routes = [
-    {path: "/"},
+    {path: "/", component: Books},
     {path: "/authors", component: Authors},
     {path: "/publishers", component: Publishers},
-    {path: "/books", component: Books},
     {path: "/books/:id/", name: 'BookDetails', component: BookDetail}
 ]
 
